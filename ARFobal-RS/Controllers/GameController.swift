@@ -13,12 +13,16 @@ import ARKit
 class GameController: UIViewController {
   
   @IBOutlet var sceneView: ARSCNView!
+  @IBOutlet var detectButton: UIButton!
+  
+  var detectionActivated = true
   var plane: Field?
+  var goal: Goal?
   
   //MARK; Lifecycle methods
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+    registerGestureRecognizers()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -51,18 +55,47 @@ class GameController: UIViewController {
   //MARK: Setup
   func setSceneConf() {
     sceneView.delegate = self
-    let configuration = ARWorldTrackingConfiguration()
-    configuration.planeDetection = .horizontal
-    
-    //See yellow detection points
-    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
-    sceneView.showsStatistics = true
-    sceneView.session.run(configuration)
+    togglePlaneDetection()
   }
   
-  func stopPlaneDetection() {
-    sceneView.session.run(ARWorldTrackingConfiguration())
-    sceneView.debugOptions = []
+  func togglePlaneDetection() {
+    let configuration = ARWorldTrackingConfiguration()
+    var debugOptions: SCNDebugOptions = []
+    
+    if detectionActivated {
+      //Delete all nodes
+      sceneView.scene.rootNode.enumerateChildNodes { (node, _) -> Void in
+        node.removeFromParentNode()
+      }
+      
+      configuration.planeDetection = .horizontal
+      debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+      detectionActivated = !detectionActivated
+    }
+    
+    sceneView.session.run(configuration)
+    sceneView.debugOptions = debugOptions
+  }
+  
+  //MARK: Actions
+  @IBAction func toggleDetection() {
+    detectionActivated = !detectionActivated
+    togglePlaneDetection()
+  }
+  
+  func registerGestureRecognizers() {
+    
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
+    self.sceneView.addGestureRecognizer(tapGestureRecognizer)
+  }
+  
+  @objc func tapped(recognizer: UIGestureRecognizer) {
+    let vector = SCNVector3((plane?.anchorPoint.center.x)!,
+                            (plane?.anchorPoint.center.y)!,
+                            (plane?.anchorPoint.center.z)!)
+    
+    goal = Goal(position: vector, sceneView: sceneView)
+    togglePlaneDetection()
   }
 }
 
@@ -73,17 +106,19 @@ extension GameController: ARSCNViewDelegate {
     guard anchor is ARPlaneAnchor else { return }
     
     //Plane detected
-    stopPlaneDetection()
+    DispatchQueue.main.async {
+      self.detectButton.isUserInteractionEnabled = !self.detectionActivated
+    }
     
     //Add field
     if let planeAnchor = anchor as? ARPlaneAnchor {
       plane = Field(anchor: planeAnchor)
+      
       node.addChildNode(plane!)
     }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-
     if let planeAnchor = anchor as? ARPlaneAnchor {
       plane?.update(anchor: planeAnchor)
     }

@@ -25,7 +25,13 @@ class Field: SCNNode {
     planeGeometry = SCNPlane(width: 3.0, height: 2.0)
     
     let material = SCNMaterial()
-    material.diffuse.contents = UIImage(named:"grass")
+    material.diffuse.contents = UIImage(named:"grass-2")
+    
+    //Repeat texture pattern
+    material.diffuse.wrapS = SCNWrapMode.repeat
+    material.diffuse.wrapT = SCNWrapMode.repeat
+    material.diffuse.contentsTransform = SCNMatrix4MakeScale(6, 6, 0)
+    
     planeGeometry.materials = [material]
     
     let planeNode = SCNNode(geometry: planeGeometry)
@@ -35,7 +41,7 @@ class Field: SCNNode {
     planeNode.position = SCNVector3Make(anchorPoint.center.x, 0, anchorPoint.center.z)
     planeNode.transform = SCNMatrix4MakeRotation(Float(-.pi / 2.0), 1.0, 0.0, 0.0)
     
-    // add to the parent
+    //Add to the parent
     self.addChildNode(planeNode)
   }
   
@@ -43,8 +49,9 @@ class Field: SCNNode {
 
     position = SCNVector3Make(anchor.center.x, 0, anchor.center.z)
     
-    let planeNode = childNodes.first!
-    planeNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: planeGeometry, options: nil))
+    if let planeNode = childNodes.first {
+      planeNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: planeGeometry, options: nil))
+    }
   }
   
   required init?(coder aDecoder: NSCoder) {

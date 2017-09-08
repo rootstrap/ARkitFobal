@@ -4,17 +4,17 @@
   <contributor>
    <authoring_tool>SceneKit Collada Exporter v1.0</authoring_tool>
   </contributor>
-  <created>2017-09-04T21:10:40Z</created>
-  <modified>2017-09-04T21:10:40Z</modified>
+  <created>2017-09-08T19:55:12Z</created>
+  <modified>2017-09-08T19:55:12Z</modified>
   <unit meter="0.025400"/>
   <up_axis>Z_UP</up_axis>
  </asset>
  <library_images>
   <image id="image1">
-   <init_from>../Soccer goal/goal/__Fencing_Chain_Link_1_0.png</init_from>
+   <init_from>../../Soccer goal/goal/__Fencing_Chain_Link_1_0.png</init_from>
   </image>
   <image id="image2">
-   <init_from>../Soccer goal/goal/__Fencing_Chain_Link_1.png</init_from>
+   <init_from>../../Soccer goal/goal/__Fencing_Chain_Link_1.png</init_from>
   </image>
  </library_images>
  <library_materials>
@@ -480,7 +480,7 @@
  <library_visual_scenes>
   <visual_scene id="scene48">
    <node id="SketchUp" name="goal">
-    <matrix>1.192093e-08 0 -0.09999999 0 0.09999999 1.192093e-08 0 0 0 -0.09999999 1.192093e-08 0 0 0 0 1 </matrix>
+    <matrix>1.192093e-08 0.09999999 0 0 0 1.192093e-08 0.09999996 0 0.09999996 0 1.192093e-08 5.089987e-09 0 0 0 1 </matrix>
     <node id="instance_0" name="instance_0">
      <matrix>1 0 0 -710.9696 0 1 0 -106.8943 0 0 1 -8.057789 0 0 0 1 </matrix>
      <node id="Component" name="Component">
