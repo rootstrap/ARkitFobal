@@ -13,6 +13,7 @@ import ARKit
 class GameController: UIViewController {
   
   @IBOutlet var sceneView: ARSCNView!
+  var plane: Field?
   
   //MARK; Lifecycle methods
   override func viewDidLoad() {
@@ -55,15 +56,13 @@ class GameController: UIViewController {
     
     //See yellow detection points
     sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
-    
     sceneView.showsStatistics = true
     sceneView.session.run(configuration)
   }
   
   func stopPlaneDetection() {
-    print("DETECTED")
     sceneView.session.run(ARWorldTrackingConfiguration())
-    print("STOP")
+    sceneView.debugOptions = []
   }
 }
 
@@ -76,6 +75,17 @@ extension GameController: ARSCNViewDelegate {
     //Plane detected
     stopPlaneDetection()
     
-    //TODO: Add field and soccer goal
+    //Add field
+    if let planeAnchor = anchor as? ARPlaneAnchor {
+      plane = Field(anchor: planeAnchor)
+      node.addChildNode(plane!)
+    }
+  }
+  
+  func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+
+    if let planeAnchor = anchor as? ARPlaneAnchor {
+      plane?.update(anchor: planeAnchor)
+    }
   }
 }
