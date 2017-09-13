@@ -16,7 +16,7 @@ class GameController: UIViewController {
   @IBOutlet var detectButton: UIButton!
   
   var detectionActivated = true
-  var plane: Field?
+  var planes: [Field] = []
   var goal: Goal?
   
   //MARK; Lifecycle methods
@@ -37,21 +37,6 @@ class GameController: UIViewController {
     sceneView.session.pause()
   }
   
-  func session(_ session: ARSession, didFailWithError error: Error) {
-    // Present an error message to the user
-    
-  }
-  
-  func sessionWasInterrupted(_ session: ARSession) {
-    // Inform the user that the session has been interrupted, for example, by presenting an overlay
-    
-  }
-  
-  func sessionInterruptionEnded(_ session: ARSession) {
-    // Reset tracking and/or remove existing anchors if consistent tracking is required
-    
-  }
-  
   //MARK: Setup
   func setSceneConf() {
     sceneView.delegate = self
@@ -69,7 +54,7 @@ class GameController: UIViewController {
       }
       
       configuration.planeDetection = .horizontal
-      debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+      debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
       detectionActivated = !detectionActivated
     }
     
@@ -90,11 +75,21 @@ class GameController: UIViewController {
   }
   
   @objc func tapped(recognizer: UIGestureRecognizer) {
-    let vector = SCNVector3((plane?.anchorPoint.center.x)!,
-                            (plane?.anchorPoint.center.y)!,
-                            (plane?.anchorPoint.center.z)!)
     
-    goal = Goal(position: vector, sceneView: sceneView)
+    if let sceneView = recognizer.view as? ARSCNView {
+      let touchLocation = recognizer.location(in: sceneView)
+      let hitTestResult = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
+      
+      if !hitTestResult.isEmpty {
+        
+        guard let hitResult = hitTestResult.first else {
+          return
+        }
+        
+        goal = Goal(hitResult: hitResult, sceneView: sceneView)
+      }
+    }
+    
     togglePlaneDetection()
   }
 }
@@ -112,13 +107,15 @@ extension GameController: ARSCNViewDelegate {
     
     //Add field
     if let planeAnchor = anchor as? ARPlaneAnchor {
-      plane = Field(anchor: planeAnchor)
-      
-      node.addChildNode(plane!)
+      let plane = Field(anchor: planeAnchor)
+      planes.append(plane)
+      node.addChildNode(plane)
     }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+    
+    let plane = planes.filter { $0.anchorPoint.identifier == anchor.identifier }.first
     if let planeAnchor = anchor as? ARPlaneAnchor {
       plane?.update(anchor: planeAnchor)
     }
