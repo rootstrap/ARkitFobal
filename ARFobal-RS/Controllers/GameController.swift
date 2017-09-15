@@ -75,7 +75,6 @@ class GameController: UIViewController {
   }
   
   @objc func tapped(recognizer: UIGestureRecognizer) {
-    
     if let sceneView = recognizer.view as? ARSCNView {
       let touchLocation = recognizer.location(in: sceneView)
       let hitTestResult = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
