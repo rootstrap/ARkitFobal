@@ -13,11 +13,13 @@ import ARKit
 class GameController: UIViewController {
   
   @IBOutlet var sceneView: ARSCNView!
-  @IBOutlet var detectButton: UIButton!
   
-  var detectionActivated = true
   var planes: [Field] = []
   var goal: Goal?
+  var ball: Ball?
+  var goalScale: Float = 1.0
+  
+  var goalPlaced = false
   
   //MARK; Lifecycle methods
   override func viewDidLoad() {
@@ -40,33 +42,14 @@ class GameController: UIViewController {
   //MARK: Setup
   func setSceneConf() {
     sceneView.delegate = self
-    togglePlaneDetection()
-  }
-  
-  func togglePlaneDetection() {
     let configuration = ARWorldTrackingConfiguration()
-    var debugOptions: SCNDebugOptions = []
-    
-    if detectionActivated {
-      //Delete all nodes
-      sceneView.scene.rootNode.enumerateChildNodes { (node, _) -> Void in
-        node.removeFromParentNode()
-      }
-      
-      configuration.planeDetection = .horizontal
-      debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
-      detectionActivated = !detectionActivated
-    }
+    configuration.planeDetection = .horizontal
     
     sceneView.session.run(configuration)
-    sceneView.debugOptions = debugOptions
+    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
   }
   
   //MARK: Actions
-  @IBAction func toggleDetection() {
-    detectionActivated = !detectionActivated
-    togglePlaneDetection()
-  }
   
   func registerGestureRecognizers() {
     
@@ -75,7 +58,9 @@ class GameController: UIViewController {
   }
   
   @objc func tapped(recognizer: UIGestureRecognizer) {
+    
     if let sceneView = recognizer.view as? ARSCNView {
+      
       let touchLocation = recognizer.location(in: sceneView)
       let hitTestResult = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
       
@@ -85,11 +70,20 @@ class GameController: UIViewController {
           return
         }
         
-        goal = Goal(hitResult: hitResult, sceneView: sceneView)
+        if !goalPlaced {
+          goal = Goal(hitResult: hitResult, sceneView: sceneView)
+          sceneView.scene.rootNode.addChildNode(goal!)
+          goalScale = Float(hitResult.distance*0.002)
+          goalPlaced = true
+          sceneView.session.run(ARWorldTrackingConfiguration())
+        } else {
+          ball?.removeFromParentNode()
+          ball = Ball(hitResult: hitResult, sceneView: sceneView, goalScale: goalScale)
+          sceneView.scene.rootNode.addChildNode(ball!)
+        }
       }
+      
     }
-    
-    togglePlaneDetection()
   }
 }
 
@@ -98,11 +92,6 @@ extension GameController: ARSCNViewDelegate {
     
     //Check if the detection is a new anchor for planes
     guard anchor is ARPlaneAnchor else { return }
-    
-    //Plane detected
-    DispatchQueue.main.async {
-      self.detectButton.isUserInteractionEnabled = !self.detectionActivated
-    }
     
     //Add field
     if let planeAnchor = anchor as? ARPlaneAnchor {
