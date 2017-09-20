@@ -16,15 +16,14 @@ class Ball: SCNNode {
     
     if let scene = SCNScene(named: "art.scnassets/soccer-ball/ball.dae"),
       let node = scene.rootNode.childNode(withName: "JABULANI", recursively: true) {
-      
-      node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-      node.position = SCNVector3(hitResult.worldTransform.columns.3.x,
+      node.scale = SCNVector3(goalScale*0.0265, goalScale*0.0265, goalScale*0.0265)
+      addChildNode(node)
+      physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+      position = SCNVector3(hitResult.worldTransform.columns.3.x,
                                  hitResult.worldTransform.columns.3.y,
                                  hitResult.worldTransform.columns.3.z)
-
-      node.scale = SCNVector3(goalScale*0.0265, goalScale*0.0265, goalScale*0.0265)
-      node.physicsBody?.categoryBitMask = BodyType.ball.rawValue
-      self.addChildNode(node)
+      physicsBody?.categoryBitMask = BodyType.ball.rawValue
+      physicsBody?.isAffectedByGravity = false
     }
   }
   

@@ -82,8 +82,17 @@ class GameController: UIViewController {
           sceneView.scene.rootNode.addChildNode(ball!)
         }
       }
-      
     }
+  }
+  
+  @IBAction func shoot(_ sender: Any) {
+    guard let currentFrame = self.sceneView.session.currentFrame, ball != nil else {
+      return
+    }
+    let force = simd_make_float4(0, 0, -10.2, 0)
+    let rotatedForce = simd_mul(currentFrame.camera.transform, force)
+    let vectorForce = SCNVector3(rotatedForce.x, 0, rotatedForce.z)
+    ball!.physicsBody?.applyForce(vectorForce, asImpulse: false)
   }
 }
 
