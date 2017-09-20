@@ -13,6 +13,8 @@ import ARKit
 class GameController: UIViewController {
   
   @IBOutlet var sceneView: ARSCNView!
+  @IBOutlet weak var intensitySlider: UISlider!
+  @IBOutlet weak var angleSlider: UISlider!
   
   var planes: [Field] = []
   var goal: Goal?
@@ -89,9 +91,11 @@ class GameController: UIViewController {
     guard let currentFrame = self.sceneView.session.currentFrame, ball != nil else {
       return
     }
-    let force = simd_make_float4(0, 0, -10.2, 0)
+
+    let force = simd_make_float4(0, 0, -intensitySlider.value, 0)
     let rotatedForce = simd_mul(currentFrame.camera.transform, force)
-    let vectorForce = SCNVector3(rotatedForce.x, 0, rotatedForce.z)
+    let vectorForce = SCNVector3(rotatedForce.x, angleSlider.value, rotatedForce.z)
+    ball!.physicsBody?.applyTorque(SCNVector4(0, 0, 1.0, -100.0), asImpulse: true)
     ball!.physicsBody?.applyForce(vectorForce, asImpulse: false)
   }
 }
