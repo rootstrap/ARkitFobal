@@ -4,8 +4,8 @@
   <contributor>
    <authoring_tool>SceneKit Collada Exporter v1.0</authoring_tool>
   </contributor>
-  <created>2017-09-04T15:43:32Z</created>
-  <modified>2017-09-04T15:43:32Z</modified>
+  <created>2017-09-19T13:57:24Z</created>
+  <modified>2017-09-19T13:57:24Z</modified>
   <unit meter="0.025400"/>
   <up_axis>Z_UP</up_axis>
  </asset>
@@ -67,7 +67,7 @@
     <technique sid="common">
      <constant>
       <transparent opaque="A_ONE">
-       <color>0.99618 0.99618 0.99618 1</color>
+       <color>0.998319 0.998319 0.998319 1</color>
       </transparent>
       <transparency>
        <float>1</float>
@@ -389,7 +389,7 @@
        <color>0 0 0 0.0509804</color>
       </diffuse>
       <transparent opaque="RGB_ZERO">
-       <color>0.989931 0.989931 0.989931 0.94902</color>
+       <color>0.995561 0.995561 0.995561 0.94902</color>
       </transparent>
       <transparency>
        <float>1</float>
@@ -1870,8 +1870,9 @@
  <library_visual_scenes>
   <visual_scene id="scene241">
    <node id="SketchUp" name="ball">
+    <matrix>1 0 0 5 0 1 0 0 0 0 1 0 0 0 0 1 </matrix>
     <node id="ID3" name="instance_0">
-     <matrix>1 0 0 196.8772 0 1 0 192.6968 0 0 1 0 0 0 0 1 </matrix>
+     <matrix>1 0 0 196.8772 0 1 0 172.4004 0 0 1 0 0 0 0 1 </matrix>
      <node id="ID4" name="Component_1">
       <instance_geometry url="#geometry16">
        <bind_material>

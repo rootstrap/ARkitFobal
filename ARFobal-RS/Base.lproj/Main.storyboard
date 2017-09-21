@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13165.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,34 +20,39 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Im1-8g-yTg">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </arscnView>
-                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9g6-hf-A93">
-                                <rect key="frame" x="20" y="617" width="69" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuN-Ha-TPt">
+                                <rect key="frame" x="152.5" y="607" width="70" height="40"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="69" id="Y7u-Ew-ZIg"/>
-                                    <constraint firstAttribute="height" constant="30" id="yFB-R4-rpf"/>
+                                    <constraint firstAttribute="height" constant="40" id="OQa-Fl-8ns"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="i66-SH-KAa"/>
                                 </constraints>
-                                <state key="normal" title="Detect">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                <state key="normal" title="Shoot">
+                                    <color key="titleColor" red="0.21861328129999999" green="0.21861328129999999" blue="0.21861328129999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="toggleDetection" destination="BV1-FR-VrT" eventType="touchUpInside" id="p7W-pQ-qc0"/>
+                                    <action selector="shoot:" destination="BV1-FR-VrT" eventType="touchUpInside" id="clr-hu-2MN"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="2G8-hm-cNf" firstAttribute="trailing" secondItem="Im1-8g-yTg" secondAttribute="trailing" id="0kK-oW-F0Q"/>
-                            <constraint firstAttribute="bottom" secondItem="9g6-hf-A93" secondAttribute="bottom" constant="20" id="Ajb-Cw-Ktk"/>
-                            <constraint firstItem="9g6-hf-A93" firstAttribute="leading" secondItem="UMC-X1-HWx" secondAttribute="leading" constant="20" id="CCz-Jg-WAL"/>
                             <constraint firstItem="2G8-hm-cNf" firstAttribute="bottom" secondItem="Im1-8g-yTg" secondAttribute="bottom" id="JJw-BR-TpZ"/>
                             <constraint firstItem="Im1-8g-yTg" firstAttribute="top" secondItem="UMC-X1-HWx" secondAttribute="top" id="V7w-ZJ-qjO"/>
                             <constraint firstItem="Im1-8g-yTg" firstAttribute="leading" secondItem="2G8-hm-cNf" secondAttribute="leading" id="bky-ZL-9Br"/>
+                            <constraint firstItem="cuN-Ha-TPt" firstAttribute="centerX" secondItem="UMC-X1-HWx" secondAttribute="centerX" id="tmw-pm-8WA"/>
+                            <constraint firstItem="2G8-hm-cNf" firstAttribute="bottom" secondItem="cuN-Ha-TPt" secondAttribute="bottom" constant="20" id="zdh-wG-6PZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2G8-hm-cNf"/>
                     </view>
                     <connections>
-                        <outlet property="detectButton" destination="9g6-hf-A93" id="KEE-aT-wjk"/>
                         <outlet property="sceneView" destination="Im1-8g-yTg" id="Ow7-tm-cdc"/>
                     </connections>
                 </viewController>

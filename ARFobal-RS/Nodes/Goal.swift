@@ -22,10 +22,13 @@ class Goal: SCNNode {
         let node = scene.rootNode.childNode(withName: "goal", recursively: true) {
       node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
       node.position = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
+      
       let distance = hitResult.distance
       node.scale = SCNVector3(distance*0.002, distance*0.002, distance*0.002)
       node.constraints = [SCNLookAtConstraint(target: currentPlace)]
-      sceneView.scene.rootNode.addChildNode(node)
+      
+      node.physicsBody?.categoryBitMask = BodyType.goal.rawValue
+      self.addChildNode(node)
     }
   }
   
