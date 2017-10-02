@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 
 enum BodyType: Int {
-  case goal = 0
   case plane = 1
-  case ball = 2
+  case ball = 4
+  case goal = 8
 }

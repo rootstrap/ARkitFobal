@@ -16,13 +16,14 @@ class Field: SCNNode {
   var planeGeometry: SCNPlane!
   
   init(anchor: ARPlaneAnchor) {
+    
     anchorPoint = anchor
     super.init()
     setup()
   }
   
   private func setup() {
-    planeGeometry = SCNPlane(width: 3.0, height: 2.0)
+    planeGeometry = SCNPlane(width: CGFloat(anchorPoint.extent.x), height: CGFloat(anchorPoint.extent.z))
     
     let material = SCNMaterial()
     material.diffuse.contents = UIImage(named:"grass-2")
@@ -35,18 +36,18 @@ class Field: SCNNode {
     planeGeometry.materials = [material]
     
     let planeNode = SCNNode(geometry: planeGeometry)
-    planeNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: planeGeometry, options: nil))
+    planeNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: self.planeGeometry, options: [:]))
     planeNode.physicsBody?.categoryBitMask = BodyType.plane.rawValue
-    
+    //planeNode.physicsBody?.collisionBitMask = BodyType.ball.rawValue
     planeNode.position = SCNVector3Make(anchorPoint.center.x, 0, anchorPoint.center.z)
-    planeNode.transform = SCNMatrix4MakeRotation(Float(-.pi / 2.0), 1.0, 0.0, 0.0)
+    planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2.0, 1.0, 0.0, 0.0)
     
-    //Add to the parent
-    self.addChildNode(planeNode)
+    // add to the parent
+    addChildNode(planeNode)
   }
   
   func update(anchor: ARPlaneAnchor) {
-
+    
     planeGeometry.width = CGFloat(anchor.extent.x)
     planeGeometry.height = CGFloat(anchor.extent.z)
     position = SCNVector3Make(anchor.center.x, 0, anchor.center.z)

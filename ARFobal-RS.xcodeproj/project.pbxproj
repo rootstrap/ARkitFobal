@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		861579341F9A242B009D296E /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861579331F9A242B009D296E /* Sphere.swift */; };
 		86B0AEBE1F59F6530049C510 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B0AEBD1F59F6530049C510 /* AppDelegate.swift */; };
 		86B0AEC01F59F6530049C510 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 86B0AEBF1F59F6530049C510 /* art.scnassets */; };
 		86B0AEC51F59F6530049C510 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86B0AEC31F59F6530049C510 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		861579331F9A242B009D296E /* Sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sphere.swift; sourceTree = "<group>"; };
 		86B0AEBA1F59F6530049C510 /* ARFobal-RS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ARFobal-RS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B0AEBD1F59F6530049C510 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86B0AEBF1F59F6530049C510 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				90447D4F1F62D37300905BEC /* Field.swift */,
+				861579331F9A242B009D296E /* Sphere.swift */,
 				908CA57F1F632D1F00E26E22 /* Goal.swift */,
 				90AF90E11F6C6BD5000DA18C /* Ball.swift */,
 			);
@@ -194,6 +197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				861579341F9A242B009D296E /* Sphere.swift in Sources */,
 				90AF90E21F6C6BD5000DA18C /* Ball.swift in Sources */,
 				905983D11F618C850064655C /* GameController.swift in Sources */,
 				90447D551F62D5D100905BEC /* BodyType.swift in Sources */,
