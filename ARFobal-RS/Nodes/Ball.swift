@@ -19,14 +19,13 @@ class Ball: SCNNode {
     super.init()
     
     let ballScene = SCNScene(named: "art.scnassets/soccer-ball/ball.dae")
-     
+
      guard let node = ballScene?.rootNode.childNode(withName: "ball", recursively: true) else {
      return
      }
 
-    //node.scale = SCNVector3(goalScale, goalScale, goalScale)
-    
     node.scale = SCNVector3(goalScale*0.265, goalScale*0.265, goalScale*0.265)
+    print(String(describing: node.scale))
     ballNode = node
     
     /*let sphere = SCNSphere(radius: 0.02)
@@ -39,9 +38,9 @@ class Ball: SCNNode {
   private func setup() {
     
     let sphere = SCNSphere(radius: CGFloat(38.68*0.5*(ballNode?.scale.x)!))
-    let sphereShape = SCNPhysicsShape(geometry: sphere)
-    let body = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: sphereShape)
-    sphere.firstMaterial?.diffuse.contents = UIColor.green
+    print(String(describing: sphere))
+    let body = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: SCNPhysicsShape(geometry: sphere, options: nil))
+    //sphere.firstMaterial?.diffuse.contents = UIColor.green
     //self.ballNode = SCNNode(geometry: sphere)
     body.isAffectedByGravity = true
     body.mass = 0.5
@@ -49,13 +48,14 @@ class Ball: SCNNode {
     body.damping = 0.9
     body.angularDamping = 0.82
     body.friction = 0.8
+    body.allowsResting = true
+    body.rollingFriction = 500
     body.categoryBitMask = BodyType.ball.rawValue
-    body.contactTestBitMask = BodyType.goal.rawValue
-   // body.collisionBitMask = BodyType.goal.rawValue | BodyType.plane.rawValue
+    //body.contactTestBitMask = BodyType.ball.rawValue
+    //body.collisionBitMask = BodyType.plane.rawValue
     self.ballNode!.physicsBody = body
     self.addChildNode(self.ballNode!)
-    /*self.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-     self.physicsBody?.isAffectedByGravity = true*/
+
   }
   
   required init?(coder aDecoder: NSCoder) {

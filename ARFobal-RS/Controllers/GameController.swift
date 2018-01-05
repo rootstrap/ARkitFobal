@@ -22,13 +22,15 @@ class GameController: UIViewController {
   var goalScale: Float = 1.0
   
   var goalPlaced = false
+  var fieldPlaced = false
   
   //MARK; Lifecycle methods
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin, SCNDebugOptions.showPhysicsShapes]
+    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, SCNDebugOptions.showPhysicsShapes, SCNDebugOptions.showWireframe]
     sceneView.delegate = self
+    sceneView.showsStatistics = true;
     sceneView.scene.physicsWorld.contactDelegate = self
     registerGestureRecognizers()
   }
@@ -104,16 +106,26 @@ class GameController: UIViewController {
   }
 }
 
+/**
+ Called when a new node has been mapped to the given anchor.
+ @param renderer The renderer that will render the scene.
+ @param node The node that maps to the anchor.
+ @param anchor The added anchor.
+ */
 extension GameController: ARSCNViewDelegate {
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+    if fieldPlaced {
+        return
+    }
     
     //Check if the detection is a new anchor for planes
     guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-    
+        
     //Add field
     let plane = Field(anchor: planeAnchor)
     planes.append(plane)
     node.addChildNode(plane)
+    fieldPlaced = true;
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -127,7 +139,23 @@ extension GameController: ARSCNViewDelegate {
 
 extension GameController: SCNPhysicsContactDelegate {
   func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
-
-    print("contact")
+    
+//    print("contact A: " + String(describing: contact.nodeA.name!) + " B: " + String(describing: contact.nodeB.name!))
+    if((contact.nodeA.name == "ball"  || contact.nodeB.name == "ball") && (contact.nodeA.name == "GoalLinePlane"  || contact.nodeB.name == "GoalLinePlane")){
+        print("GOAL!")
+        createExplosion(position: (ball?.ballNode?.presentation.position)!, rotation: (ball?.ballNode?.presentation.rotation)!)
+        
+        ball?.ballNode?.removeFromParentNode()
+        ball?.removeFromParentNode()
+    }
   }
+    
+    func createExplosion(position: SCNVector3, rotation: SCNVector4) {
+        let explosion = SCNParticleSystem(named: "Goal Particle System", inDirectory: nil)!
+        
+        let rotationMatrix = SCNMatrix4MakeRotation(rotation.w, rotation.x, rotation.y, rotation.z)
+        let translationMatrix = SCNMatrix4MakeTranslation(position.x, position.y, position.z)
+        let transformMatrix = SCNMatrix4Mult(rotationMatrix, translationMatrix)
+        sceneView.scene.addParticleSystem(explosion, transform: transformMatrix)
+    }
 }

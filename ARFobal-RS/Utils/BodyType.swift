@@ -14,4 +14,5 @@ enum BodyType: Int {
   case plane = 1
   case ball = 4
   case goal = 8
+  case goalLine = 16
 }

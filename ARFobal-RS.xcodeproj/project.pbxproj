@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8421C5951FFFC9DD003FC3D4 /* Goal Particle System.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 8421C5931FFFC9DD003FC3D4 /* Goal Particle System.scnp */; };
+		8421C5961FFFC9DD003FC3D4 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 8421C5941FFFC9DD003FC3D4 /* star.png */; };
 		861579341F9A242B009D296E /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861579331F9A242B009D296E /* Sphere.swift */; };
 		86B0AEBE1F59F6530049C510 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B0AEBD1F59F6530049C510 /* AppDelegate.swift */; };
 		86B0AEC01F59F6530049C510 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 86B0AEBF1F59F6530049C510 /* art.scnassets */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8421C5931FFFC9DD003FC3D4 /* Goal Particle System.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; path = "Goal Particle System.scnp"; sourceTree = "<group>"; };
+		8421C5941FFFC9DD003FC3D4 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
 		861579331F9A242B009D296E /* Sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sphere.swift; sourceTree = "<group>"; };
 		86B0AEBA1F59F6530049C510 /* ARFobal-RS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ARFobal-RS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B0AEBD1F59F6530049C510 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +51,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8421C58E1FFFC6FA003FC3D4 /* Particles */ = {
+			isa = PBXGroup;
+			children = (
+				8421C5931FFFC9DD003FC3D4 /* Goal Particle System.scnp */,
+				8421C5941FFFC9DD003FC3D4 /* star.png */,
+			);
+			path = Particles;
+			sourceTree = "<group>";
+		};
 		86B0AEB11F59F6530049C510 = {
 			isa = PBXGroup;
 			children = (
@@ -66,6 +79,7 @@
 		86B0AEBC1F59F6530049C510 /* ARFobal-RS */ = {
 			isa = PBXGroup;
 			children = (
+				8421C58E1FFFC6FA003FC3D4 /* Particles */,
 				90447D511F62D58E00905BEC /* Utils */,
 				90447D4E1F62D36000905BEC /* Nodes */,
 				905983CE1F618B8C0064655C /* Controllers */,
@@ -169,7 +183,9 @@
 				86B0AEC01F59F6530049C510 /* art.scnassets in Resources */,
 				86B0AECA1F59F6530049C510 /* LaunchScreen.storyboard in Resources */,
 				86B0AEC71F59F6530049C510 /* Assets.xcassets in Resources */,
+				8421C5951FFFC9DD003FC3D4 /* Goal Particle System.scnp in Resources */,
 				86B0AEC51F59F6530049C510 /* Main.storyboard in Resources */,
+				8421C5961FFFC9DD003FC3D4 /* star.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,7 +357,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WNU857N39T;
+				DEVELOPMENT_TEAM = 8T2BY9Q724;
 				INFOPLIST_FILE = "ARFobal-RS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Rootstrap.ARFobal-RS";
@@ -356,7 +372,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WNU857N39T;
+				DEVELOPMENT_TEAM = 8T2BY9Q724;
 				INFOPLIST_FILE = "ARFobal-RS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Rootstrap.ARFobal-RS";

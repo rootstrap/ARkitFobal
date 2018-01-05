@@ -13,7 +13,7 @@ import ARKit
 class Field: SCNNode {
   
   var anchorPoint: ARPlaneAnchor
-  var planeGeometry: SCNPlane!
+  var planeGeometry: SCNBox!
   
   init(anchor: ARPlaneAnchor) {
     
@@ -23,7 +23,9 @@ class Field: SCNNode {
   }
   
   private func setup() {
-    planeGeometry = SCNPlane(width: CGFloat(anchorPoint.extent.x), height: CGFloat(anchorPoint.extent.z))
+    //planeGeometry = SCNPlane(width: CGFloat(anchorPoint.extent.x), height: CGFloat(anchorPoint.extent.z))
+    //IA: The ball appears to roll off the plane if the height of this box isn't at least 0.015, the same thing happens with a plane
+    planeGeometry = SCNBox(width: CGFloat(anchorPoint.extent.x), height: 0.015, length: CGFloat(anchorPoint.extent.z), chamferRadius: 0)
     
     let material = SCNMaterial()
     material.diffuse.contents = UIImage(named:"grass-2")
@@ -37,10 +39,14 @@ class Field: SCNNode {
     
     let planeNode = SCNNode(geometry: planeGeometry)
     planeNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: self.planeGeometry, options: [:]))
+    planeNode.physicsBody?.restitution = 0.0
+    planeNode.physicsBody?.friction = 1.0
     planeNode.physicsBody?.categoryBitMask = BodyType.plane.rawValue
-    //planeNode.physicsBody?.collisionBitMask = BodyType.ball.rawValue
+    planeNode.physicsBody?.contactTestBitMask = BodyType.ball.rawValue | BodyType.plane.rawValue
     planeNode.position = SCNVector3Make(anchorPoint.center.x, 0, anchorPoint.center.z)
-    planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2.0, 1.0, 0.0, 0.0)
+    planeNode.transform = SCNMatrix4MakeRotation(0.0, 1.0, 0.0, 0.0)
+    
+    
     
     // add to the parent
     addChildNode(planeNode)
@@ -49,7 +55,7 @@ class Field: SCNNode {
   func update(anchor: ARPlaneAnchor) {
     
     planeGeometry.width = CGFloat(anchor.extent.x)
-    planeGeometry.height = CGFloat(anchor.extent.z)
+    planeGeometry.length = CGFloat(anchor.extent.z)
     position = SCNVector3Make(anchor.center.x, 0, anchor.center.z)
     
     if let planeNode = childNodes.first {
