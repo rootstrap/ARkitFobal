@@ -28,7 +28,7 @@ class GameController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, SCNDebugOptions.showPhysicsShapes, SCNDebugOptions.showWireframe]
+    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, SCNDebugOptions.showPhysicsShapes]
     sceneView.delegate = self
     sceneView.showsStatistics = true;
     sceneView.scene.physicsWorld.contactDelegate = self
@@ -143,7 +143,7 @@ extension GameController: SCNPhysicsContactDelegate {
 //    print("contact A: " + String(describing: contact.nodeA.name!) + " B: " + String(describing: contact.nodeB.name!))
     if((contact.nodeA.name == "ball"  || contact.nodeB.name == "ball") && (contact.nodeA.name == "GoalLinePlane"  || contact.nodeB.name == "GoalLinePlane")){
         print("GOAL!")
-        createExplosion(position: (ball?.ballNode?.presentation.position)!, rotation: (ball?.ballNode?.presentation.rotation)!)
+        createExplosion(position: contact.contactPoint, rotation: (ball?.ballNode?.presentation.rotation)!)
         
         ball?.ballNode?.removeFromParentNode()
         ball?.removeFromParentNode()
