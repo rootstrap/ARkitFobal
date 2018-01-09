@@ -13,16 +13,18 @@ import ARKit
 class Field: SCNNode {
   
   var anchorPoint: ARPlaneAnchor
-  var planeGeometry: SCNPlane!
+  var planeGeometry: SCNBox!
   
   init(anchor: ARPlaneAnchor) {
+    
     anchorPoint = anchor
     super.init()
     setup()
   }
   
   private func setup() {
-    planeGeometry = SCNPlane(width: 3.0, height: 2.0)
+    //IA: The ball appears to roll off the plane if the height of this box isn't at least 0.015, the same thing happens with a plane
+    planeGeometry = SCNBox(width: CGFloat(anchorPoint.extent.x), height: 0.015, length: CGFloat(anchorPoint.extent.z), chamferRadius: 0)
     
     let material = SCNMaterial()
     material.diffuse.contents = UIImage(named:"grass-2")
@@ -35,20 +37,21 @@ class Field: SCNNode {
     planeGeometry.materials = [material]
     
     let planeNode = SCNNode(geometry: planeGeometry)
-    planeNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: planeGeometry, options: nil))
+    planeNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: self.planeGeometry, options: [:]))
+    planeNode.physicsBody?.restitution = 0.0
+    planeNode.physicsBody?.friction = 1.0
     planeNode.physicsBody?.categoryBitMask = BodyType.plane.rawValue
-    
+    planeNode.physicsBody?.contactTestBitMask = BodyType.ball.rawValue | BodyType.plane.rawValue
     planeNode.position = SCNVector3Make(anchorPoint.center.x, 0, anchorPoint.center.z)
-    planeNode.transform = SCNMatrix4MakeRotation(Float(-.pi / 2.0), 1.0, 0.0, 0.0)
     
-    //Add to the parent
-    self.addChildNode(planeNode)
+    // add to the parent
+    addChildNode(planeNode)
   }
   
   func update(anchor: ARPlaneAnchor) {
-
+    
     planeGeometry.width = CGFloat(anchor.extent.x)
-    planeGeometry.height = CGFloat(anchor.extent.z)
+    planeGeometry.length = CGFloat(anchor.extent.z)
     position = SCNVector3Make(anchor.center.x, 0, anchor.center.z)
     
     if let planeNode = childNodes.first {

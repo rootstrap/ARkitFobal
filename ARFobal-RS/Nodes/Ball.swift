@@ -8,26 +8,46 @@
 
 import Foundation
 import SceneKit
-import ARKit
 
 class Ball: SCNNode {
-  init(hitResult: ARHitTestResult, sceneView: ARSCNView, goalScale: Float) {
+  
+  var ballNode: SCNNode?
+  
+  private var zVelocityOffset = 0.1
+  
+  init(goalScale: Float) {
     super.init()
     
-    if let scene = SCNScene(named: "art.scnassets/soccer-ball/ball.dae"),
-      let node = scene.rootNode.childNode(withName: "JABULANI", recursively: true) {
-      node.scale = SCNVector3(goalScale*0.0265, goalScale*0.0265, goalScale*0.0265)
-      addChildNode(node)
-      physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-      position = SCNVector3(hitResult.worldTransform.columns.3.x,
-                                 hitResult.worldTransform.columns.3.y,
-                                 hitResult.worldTransform.columns.3.z)
-      physicsBody?.categoryBitMask = BodyType.ball.rawValue
-      physicsBody?.isAffectedByGravity = false
+    let ballScene = SCNScene(named: "art.scnassets/soccer-ball/ball.dae")
+
+    guard let node = ballScene?.rootNode.childNode(withName: "ball", recursively: true) else {
+        return
     }
+
+    node.scale = SCNVector3(goalScale * 0.265, goalScale * 0.265, goalScale * 0.265)
+    ballNode = node
+    
+    setup()
+  }
+  
+  private func setup() {
+    let sphere = SCNSphere(radius: CGFloat(38.68 * 0.5 * ballNode!.scale.x))
+    let body = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: SCNPhysicsShape(geometry: sphere, options: nil))
+    body.isAffectedByGravity = true
+    body.mass = 0.5
+    body.restitution = 0.5
+    body.damping = 0.9
+    body.angularDamping = 0.82
+    body.friction = 0.8
+    body.allowsResting = true
+    body.rollingFriction = 500
+    body.categoryBitMask = BodyType.ball.rawValue
+    self.ballNode!.physicsBody = body
+    self.addChildNode(self.ballNode!)
   }
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  
 }
