@@ -23,7 +23,6 @@ class Field: SCNNode {
   }
   
   private func setup() {
-    //planeGeometry = SCNPlane(width: CGFloat(anchorPoint.extent.x), height: CGFloat(anchorPoint.extent.z))
     //IA: The ball appears to roll off the plane if the height of this box isn't at least 0.015, the same thing happens with a plane
     planeGeometry = SCNBox(width: CGFloat(anchorPoint.extent.x), height: 0.015, length: CGFloat(anchorPoint.extent.z), chamferRadius: 0)
     

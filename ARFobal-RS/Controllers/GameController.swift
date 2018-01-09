@@ -16,13 +16,12 @@ class GameController: UIViewController {
   @IBOutlet weak var intensitySlider: UISlider!
   @IBOutlet weak var angleSlider: UISlider!
   
-  private var planes: [Field] = []
+  private var field: Field?
   private var goal: Goal?
   private var ball: Ball?
   var goalScale: Float = 1.0
   
   var goalPlaced = false
-  var fieldPlaced = false
   
   //MARK; Lifecycle methods
   override func viewDidLoad() {
@@ -114,7 +113,7 @@ class GameController: UIViewController {
  */
 extension GameController: ARSCNViewDelegate {
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-    if fieldPlaced {
+    if field != nil {
         return
     }
     
@@ -123,24 +122,20 @@ extension GameController: ARSCNViewDelegate {
         
     //Add field
     let plane = Field(anchor: planeAnchor)
-    planes.append(plane)
+    field = plane
     node.addChildNode(plane)
-    fieldPlaced = true;
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-    
-    let plane = planes.filter { $0.anchorPoint.identifier == anchor.identifier }.first
-    if let planeAnchor = anchor as? ARPlaneAnchor {
-      plane?.update(anchor: planeAnchor)
+    if field?.anchorPoint.identifier == anchor.identifier, let fieldAnchor = anchor as? ARPlaneAnchor{
+        field?.update(anchor: fieldAnchor)
     }
   }
 }
 
 extension GameController: SCNPhysicsContactDelegate {
   func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
-    
-//    print("contact A: " + String(describing: contact.nodeA.name!) + " B: " + String(describing: contact.nodeB.name!))
+
     if((contact.nodeA.name == "ball"  || contact.nodeB.name == "ball") && (contact.nodeA.name == "GoalLinePlane"  || contact.nodeB.name == "GoalLinePlane")){
         print("GOAL!")
         createExplosion(position: contact.contactPoint, rotation: (ball?.ballNode?.presentation.rotation)!)

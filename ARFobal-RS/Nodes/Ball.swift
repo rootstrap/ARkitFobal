@@ -28,20 +28,12 @@ class Ball: SCNNode {
     print(String(describing: node.scale))
     ballNode = node
     
-    /*let sphere = SCNSphere(radius: 0.02)
-    sphere.firstMaterial?.diffuse.contents = UIColor.green
-    self.ballNode = SCNNode(geometry: sphere)*/
-    
     setup()
   }
   
   private func setup() {
-    
     let sphere = SCNSphere(radius: CGFloat(38.68*0.5*(ballNode?.scale.x)!))
-    print(String(describing: sphere))
     let body = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: SCNPhysicsShape(geometry: sphere, options: nil))
-    //sphere.firstMaterial?.diffuse.contents = UIColor.green
-    //self.ballNode = SCNNode(geometry: sphere)
     body.isAffectedByGravity = true
     body.mass = 0.5
     body.restitution = 0.5
@@ -51,11 +43,8 @@ class Ball: SCNNode {
     body.allowsResting = true
     body.rollingFriction = 500
     body.categoryBitMask = BodyType.ball.rawValue
-    //body.contactTestBitMask = BodyType.ball.rawValue
-    //body.collisionBitMask = BodyType.plane.rawValue
     self.ballNode!.physicsBody = body
     self.addChildNode(self.ballNode!)
-
   }
   
   required init?(coder aDecoder: NSCoder) {

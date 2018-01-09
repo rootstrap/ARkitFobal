@@ -27,7 +27,6 @@ class Goal: SCNNode {
       let goalLinePlane = node.childNode(withName: "GoalLinePlane", recursively: true)
         
       goalNode = node
-        
       
       let distance = hitResult.distance
       let scaleVector = SCNVector3(distance*0.002, distance*0.002, distance*0.002)
@@ -39,7 +38,7 @@ class Goal: SCNNode {
       
       let goalShape = SCNPhysicsShape(node: goalNode!, options: [ .type: SCNPhysicsShape.ShapeType.concavePolyhedron, .scale: distance*0.002])
       
-      let body = SCNPhysicsBody(type: SCNPhysicsBodyType.kinematic, shape: goalShape)
+      let body = SCNPhysicsBody(type: .kinematic, shape: goalShape)
       body.categoryBitMask = BodyType.goal.rawValue
       body.contactTestBitMask = BodyType.ball.rawValue
       body.mass = 15
@@ -47,7 +46,7 @@ class Goal: SCNNode {
         
       goalLinePlane?.geometry?.firstMaterial?.diffuse.contents = UIColor.clear
         
-      let goalLinePhysicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.kinematic, shape: nil)
+      let goalLinePhysicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
       goalLinePhysicsBody.categoryBitMask = BodyType.goalLine.rawValue
       goalLinePhysicsBody.collisionBitMask = BodyType.goalLine.rawValue
       goalLinePhysicsBody.contactTestBitMask = BodyType.ball.rawValue
