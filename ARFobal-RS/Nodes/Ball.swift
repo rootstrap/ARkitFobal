@@ -24,14 +24,14 @@ class Ball: SCNNode {
         return
     }
 
-    node.scale = SCNVector3(goalScale*0.265, goalScale*0.265, goalScale*0.265)
+    node.scale = SCNVector3(goalScale * 0.265, goalScale * 0.265, goalScale * 0.265)
     ballNode = node
     
     setup()
   }
   
   private func setup() {
-    let sphere = SCNSphere(radius: CGFloat(38.68*0.5*(ballNode?.scale.x)!))
+    let sphere = SCNSphere(radius: CGFloat(38.68 * 0.5 * ballNode!.scale.x))
     let body = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: SCNPhysicsShape(geometry: sphere, options: nil))
     body.isAffectedByGravity = true
     body.mass = 0.5
