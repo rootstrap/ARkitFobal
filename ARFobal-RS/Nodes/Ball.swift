@@ -20,12 +20,11 @@ class Ball: SCNNode {
     
     let ballScene = SCNScene(named: "art.scnassets/soccer-ball/ball.dae")
 
-     guard let node = ballScene?.rootNode.childNode(withName: "ball", recursively: true) else {
-     return
-     }
+    guard let node = ballScene?.rootNode.childNode(withName: "ball", recursively: true) else {
+        return
+    }
 
     node.scale = SCNVector3(goalScale*0.265, goalScale*0.265, goalScale*0.265)
-    print(String(describing: node.scale))
     ballNode = node
     
     setup()
