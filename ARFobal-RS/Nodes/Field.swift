@@ -43,9 +43,6 @@ class Field: SCNNode {
     planeNode.physicsBody?.categoryBitMask = BodyType.plane.rawValue
     planeNode.physicsBody?.contactTestBitMask = BodyType.ball.rawValue | BodyType.plane.rawValue
     planeNode.position = SCNVector3Make(anchorPoint.center.x, 0, anchorPoint.center.z)
-    planeNode.transform = SCNMatrix4MakeRotation(0.0, 1.0, 0.0, 0.0)
-    
-    
     
     // add to the parent
     addChildNode(planeNode)
