@@ -78,10 +78,10 @@ class GameController: UIViewController {
         sceneView.session.run(ARWorldTrackingConfiguration())
         goal = Goal(hitResult: hitResult, sceneView: sceneView)
         sceneView.scene.rootNode.addChildNode(goal!.goalNode!)
-        goalScale = Float(hitResult.distance*0.002)
+        goalScale = Float(hitResult.distance * 0.002)
         goalPlaced = true
-        intensitySlider.maximumValue = Float(hitResult.distance*200)
-        angleSlider.maximumValue = Float(hitResult.distance*200)
+        intensitySlider.maximumValue = Float(hitResult.distance * 200)
+        angleSlider.maximumValue = Float(hitResult.distance * 200)
       } else {
         ball?.removeFromParentNode()
         ball?.ballNode?.removeFromParentNode()
@@ -136,8 +136,7 @@ extension GameController: ARSCNViewDelegate {
 extension GameController: SCNPhysicsContactDelegate {
   func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
 
-    if((contact.nodeA.name == "ball"  || contact.nodeB.name == "ball") && (contact.nodeA.name == "GoalLinePlane"  || contact.nodeB.name == "GoalLinePlane")){
-        print("GOAL!")
+    if(contact.nodeA.name == "ball"  || contact.nodeB.name == "ball") && (contact.nodeA.name == "GoalLinePlane"  || contact.nodeB.name == "GoalLinePlane"){
         createExplosion(position: contact.contactPoint, rotation: (ball?.ballNode?.presentation.rotation)!)
         
         ball?.ballNode?.removeFromParentNode()
