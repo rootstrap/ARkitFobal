@@ -12,9 +12,9 @@ import SceneKit
 class Ball: SCNNode {
   
   var ballNode: SCNNode?
-  
-  private var zVelocityOffset = 0.1
-  
+    
+  var state: BallState = BallState.NOT_PLACED
+    
   init(goalScale: Float) {
     super.init()
     
@@ -37,10 +37,10 @@ class Ball: SCNNode {
     body.mass = 0.5
     body.restitution = 0.5
     body.damping = 0.9
-    body.angularDamping = 0.82
+    body.angularDamping = 0.9
     body.friction = 0.8
-    body.allowsResting = true
-    body.rollingFriction = 500
+//    body.allowsResting = false
+    body.rollingFriction = 0.8
     body.categoryBitMask = BodyType.ball.rawValue
     self.ballNode!.physicsBody = body
     self.addChildNode(self.ballNode!)

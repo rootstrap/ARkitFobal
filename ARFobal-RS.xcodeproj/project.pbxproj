@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8417BD9F202222CA007E6874 /* BallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417BD9E202222CA007E6874 /* BallState.swift */; };
 		8421C5951FFFC9DD003FC3D4 /* Goal Particle System.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 8421C5931FFFC9DD003FC3D4 /* Goal Particle System.scnp */; };
 		8421C5961FFFC9DD003FC3D4 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 8421C5941FFFC9DD003FC3D4 /* star.png */; };
 		86B0AEBE1F59F6530049C510 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B0AEBD1F59F6530049C510 /* AppDelegate.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8417BD9E202222CA007E6874 /* BallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallState.swift; sourceTree = "<group>"; };
 		8421C5931FFFC9DD003FC3D4 /* Goal Particle System.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; path = "Goal Particle System.scnp"; sourceTree = "<group>"; };
 		8421C5941FFFC9DD003FC3D4 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
 		86B0AEBA1F59F6530049C510 /* ARFobal-RS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ARFobal-RS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,6 +51,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8417BD9D202222AF007E6874 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				8417BD9E202222CA007E6874 /* BallState.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
 		8421C58E1FFFC6FA003FC3D4 /* Particles */ = {
 			isa = PBXGroup;
 			children = (
@@ -77,6 +87,7 @@
 		86B0AEBC1F59F6530049C510 /* ARFobal-RS */ = {
 			isa = PBXGroup;
 			children = (
+				8417BD9D202222AF007E6874 /* Enums */,
 				8421C58E1FFFC6FA003FC3D4 /* Particles */,
 				90447D511F62D58E00905BEC /* Utils */,
 				90447D4E1F62D36000905BEC /* Nodes */,
@@ -213,6 +224,7 @@
 				90AF90E21F6C6BD5000DA18C /* Ball.swift in Sources */,
 				905983D11F618C850064655C /* GameController.swift in Sources */,
 				90447D551F62D5D100905BEC /* BodyType.swift in Sources */,
+				8417BD9F202222CA007E6874 /* BallState.swift in Sources */,
 				86B0AEBE1F59F6530049C510 /* AppDelegate.swift in Sources */,
 				908CA5801F632D1F00E26E22 /* Goal.swift in Sources */,
 				90447D501F62D37300905BEC /* Field.swift in Sources */,
