@@ -198,7 +198,6 @@ extension GameController: SCNSceneRendererDelegate{
             abs(currentVelocity.y) < restingVelocityThreshold.y &&
             abs(currentVelocity.z) < restingVelocityThreshold.z){
             ballIsResting = true
-            print(String(describing: ballPhysicsBody.velocity))
             DispatchQueue.main.async{
                 self.restingLabel!.text = "Resting"
             }

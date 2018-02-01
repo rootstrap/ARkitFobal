@@ -10,6 +10,7 @@
 		8417BD9F202222CA007E6874 /* BallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417BD9E202222CA007E6874 /* BallState.swift */; };
 		8421C5951FFFC9DD003FC3D4 /* Goal Particle System.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 8421C5931FFFC9DD003FC3D4 /* Goal Particle System.scnp */; };
 		8421C5961FFFC9DD003FC3D4 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 8421C5941FFFC9DD003FC3D4 /* star.png */; };
+		84D6A968202384260047DB78 /* SCNVector3Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D6A967202384260047DB78 /* SCNVector3Extensions.swift */; };
 		86B0AEBE1F59F6530049C510 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B0AEBD1F59F6530049C510 /* AppDelegate.swift */; };
 		86B0AEC01F59F6530049C510 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 86B0AEBF1F59F6530049C510 /* art.scnassets */; };
 		86B0AEC51F59F6530049C510 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86B0AEC31F59F6530049C510 /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 		8417BD9E202222CA007E6874 /* BallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallState.swift; sourceTree = "<group>"; };
 		8421C5931FFFC9DD003FC3D4 /* Goal Particle System.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; path = "Goal Particle System.scnp"; sourceTree = "<group>"; };
 		8421C5941FFFC9DD003FC3D4 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
+		84D6A967202384260047DB78 /* SCNVector3Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNVector3Extensions.swift; sourceTree = "<group>"; };
 		86B0AEBA1F59F6530049C510 /* ARFobal-RS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ARFobal-RS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B0AEBD1F59F6530049C510 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86B0AEBF1F59F6530049C510 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				90447D541F62D5D100905BEC /* BodyType.swift */,
+				84D6A967202384260047DB78 /* SCNVector3Extensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				86B0AEBE1F59F6530049C510 /* AppDelegate.swift in Sources */,
 				908CA5801F632D1F00E26E22 /* Goal.swift in Sources */,
 				90447D501F62D37300905BEC /* Field.swift in Sources */,
+				84D6A968202384260047DB78 /* SCNVector3Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

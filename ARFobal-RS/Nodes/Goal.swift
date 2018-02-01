@@ -29,14 +29,17 @@ class Goal: SCNNode {
       goalNode = node
       
       let distance = hitResult.distance
-      let scaleVector = SCNVector3(distance*0.002, distance*0.002, distance*0.002)
+      print("distance: " + String(describing: distance))
+      let scale = max(0.00225, distance * 0.0015)
+      let scaleVector = SCNVector3(scale, scale, scale)
+      print("goal scale: " + String(describing: scale))
       goalNode?.scale = scaleVector
       
       goalNode?.position = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
       
       goalNode?.constraints = [SCNLookAtConstraint(target: currentPlace)]
       
-      let goalShape = SCNPhysicsShape(node: goalNode!, options: [ .type: SCNPhysicsShape.ShapeType.concavePolyhedron, .scale: distance*0.002])
+      let goalShape = SCNPhysicsShape(node: goalNode!, options: [ .type: SCNPhysicsShape.ShapeType.concavePolyhedron, .scale: scale])
       
       let body = SCNPhysicsBody(type: .kinematic, shape: goalShape)
       body.categoryBitMask = BodyType.goal.rawValue
