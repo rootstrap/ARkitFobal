@@ -40,6 +40,7 @@ class Field: SCNNode {
     planeNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: self.planeGeometry, options: [:]))
     planeNode.physicsBody?.restitution = 0.0
     planeNode.physicsBody?.friction = 1.0
+    planeNode.physicsBody?.rollingFriction = 1.0
     planeNode.physicsBody?.categoryBitMask = BodyType.plane.rawValue
     planeNode.physicsBody?.contactTestBitMask = BodyType.ball.rawValue | BodyType.plane.rawValue
     planeNode.position = SCNVector3Make(anchorPoint.center.x, 0, anchorPoint.center.z)

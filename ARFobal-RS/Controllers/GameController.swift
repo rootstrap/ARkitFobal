@@ -15,6 +15,8 @@ class GameController: UIViewController {
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var intensitySlider: UISlider!
   @IBOutlet weak var angleSlider: UISlider!
+  @IBOutlet weak var goalLabel: UILabel!
+  @IBOutlet weak var restingLabel: UILabel!
   
   private var field: Field?
   private var goal: Goal?
@@ -22,10 +24,18 @@ class GameController: UIViewController {
   var goalScale: Float = 1.0
   
   var goalPlaced = false
-  
+  var madeGoal = false
+  var ballIsResting = false
+    
+  var goalLblOriginRect: CGRect?
+    
+  var restingVelocityThreshold: SCNVector3 = SCNVector3Make(0.001, 0.001, 0.001)
+    
   //MARK; Lifecycle methods
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    self.goalLblOriginRect = self.goalLabel.frame
     
     sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, SCNDebugOptions.showPhysicsShapes]
     sceneView.delegate = self
@@ -83,6 +93,8 @@ class GameController: UIViewController {
         intensitySlider.maximumValue = Float(hitResult.distance * 200)
         angleSlider.maximumValue = Float(hitResult.distance * 200)
       } else {
+        madeGoal = false
+        ball?.state = .placed
         ball?.removeFromParentNode()
         ball?.ballNode?.removeFromParentNode()
         ball = Ball(goalScale: goalScale)
@@ -95,6 +107,15 @@ class GameController: UIViewController {
   }
   
   @IBAction func shoot(_ sender: Any) {
+    if ball?.state == .shot || ball?.state == .resting {
+        return
+    }
+    
+    ball?.state = .shot
+    
+    ballIsResting = false
+    restingLabel.text = "Not Resting"
+
     guard let currentFrame = self.sceneView.session.currentFrame, ball != nil else {
       return
     }
@@ -136,11 +157,22 @@ extension GameController: ARSCNViewDelegate {
 extension GameController: SCNPhysicsContactDelegate {
   func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
 
-    if(contact.nodeA.name == "ball"  || contact.nodeB.name == "ball") && (contact.nodeA.name == "GoalLinePlane"  || contact.nodeB.name == "GoalLinePlane"){
+    if !madeGoal && ((contact.nodeA.name == "GoalLinePlane" && contact.nodeB.name == "ball") || (contact.nodeA.name == "ball" && contact.nodeB.name == "GoalLinePlane")) {
+        madeGoal = true
+        
         createExplosion(position: contact.contactPoint, rotation: (ball?.ballNode?.presentation.rotation)!)
         
-        ball?.ballNode?.removeFromParentNode()
-        ball?.removeFromParentNode()
+        DispatchQueue.main.async {
+            let originFrame = self.goalLabel.frame
+            let animator = UIViewPropertyAnimator(duration: 1.2, curve: .linear, animations: {
+                self.goalLabel.frame = self.goalLabel.frame.offsetBy(dx: self.view.frame.width + originFrame.width, dy: 0)
+            })
+            animator.addCompletion({ _ in
+                self.goalLabel.frame = self.goalLblOriginRect!
+            })
+            animator.startAnimation()
+        }
+
     }
   }
     
@@ -151,5 +183,24 @@ extension GameController: SCNPhysicsContactDelegate {
         let translationMatrix = SCNMatrix4MakeTranslation(position.x, position.y, position.z)
         let transformMatrix = SCNMatrix4Mult(rotationMatrix, translationMatrix)
         sceneView.scene.addParticleSystem(explosion, transform: transformMatrix)
+    }
+}
+
+extension GameController: SCNSceneRendererDelegate{
+    func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
+        guard let ballPhysicsBody = ball?.ballNode?.physicsBody else {
+            return
+        }
+        
+        let currentVelocity = ballPhysicsBody.velocity
+        if ball?.state == .shot &&
+            abs(currentVelocity.x) < restingVelocityThreshold.x &&
+            abs(currentVelocity.y) < restingVelocityThreshold.y &&
+            abs(currentVelocity.z) < restingVelocityThreshold.z {
+            ballIsResting = true
+            DispatchQueue.main.async{
+                self.restingLabel!.text = "Resting"
+            }
+        }
     }
 }

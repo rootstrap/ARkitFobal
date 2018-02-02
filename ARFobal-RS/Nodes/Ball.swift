@@ -12,9 +12,9 @@ import SceneKit
 class Ball: SCNNode {
   
   var ballNode: SCNNode?
-  
-  private var zVelocityOffset = 0.1
-  
+    
+  var state: BallState = .notPlaced
+    
   init(goalScale: Float) {
     super.init()
     
@@ -24,7 +24,9 @@ class Ball: SCNNode {
         return
     }
 
-    node.scale = SCNVector3(goalScale * 0.265, goalScale * 0.265, goalScale * 0.265)
+    //IA: on very small scales the ball keeps rolling on top of the field when a force is applied to it, increasing the scale seems to have solved the problem
+    let scale = max(0.00125, goalScale * 0.4)
+    node.scale = SCNVector3(scale, scale, scale)
     ballNode = node
     
     setup()
@@ -37,10 +39,9 @@ class Ball: SCNNode {
     body.mass = 0.5
     body.restitution = 0.5
     body.damping = 0.9
-    body.angularDamping = 0.82
+    body.angularDamping = 0.999
     body.friction = 0.8
-    body.allowsResting = true
-    body.rollingFriction = 500
+    body.rollingFriction = 0.8
     body.categoryBitMask = BodyType.ball.rawValue
     self.ballNode!.physicsBody = body
     self.addChildNode(self.ballNode!)

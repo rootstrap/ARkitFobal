@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -46,6 +46,24 @@
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="cuo-29-teO">
                                 <rect key="frame" x="16" y="512" width="343" height="31"/>
                             </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GOAL" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kWV-fN-53N">
+                                <rect key="frame" x="-93" y="115" width="85" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <size key="shadowOffset" width="1" height="-1"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Resting" textAlignment="natural" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yUP-bI-aP8">
+                                <rect key="frame" x="317.5" y="0.0" width="57.5" height="21"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" none="YES"/>
+                                </accessibility>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -53,12 +71,14 @@
                             <constraint firstItem="cuo-29-teO" firstAttribute="leading" secondItem="2G8-hm-cNf" secondAttribute="leading" constant="18" id="3YX-3v-GhF"/>
                             <constraint firstItem="ZJX-LT-bml" firstAttribute="leading" secondItem="2G8-hm-cNf" secondAttribute="leading" constant="18" id="Cr1-ay-F0Y"/>
                             <constraint firstItem="2G8-hm-cNf" firstAttribute="bottom" secondItem="Im1-8g-yTg" secondAttribute="bottom" id="JJw-BR-TpZ"/>
+                            <constraint firstAttribute="trailing" secondItem="yUP-bI-aP8" secondAttribute="trailing" id="JLl-z6-ZLm"/>
                             <constraint firstItem="cuN-Ha-TPt" firstAttribute="top" secondItem="ZJX-LT-bml" secondAttribute="bottom" constant="15" id="NZH-9L-1Sl"/>
                             <constraint firstItem="2G8-hm-cNf" firstAttribute="trailing" secondItem="ZJX-LT-bml" secondAttribute="trailing" constant="18" id="Shm-dz-HbP"/>
                             <constraint firstItem="Im1-8g-yTg" firstAttribute="top" secondItem="UMC-X1-HWx" secondAttribute="top" id="V7w-ZJ-qjO"/>
                             <constraint firstItem="Im1-8g-yTg" firstAttribute="leading" secondItem="2G8-hm-cNf" secondAttribute="leading" id="bky-ZL-9Br"/>
                             <constraint firstItem="ZJX-LT-bml" firstAttribute="top" secondItem="cuo-29-teO" secondAttribute="bottom" constant="20" id="tU8-nt-Lyr"/>
                             <constraint firstItem="cuN-Ha-TPt" firstAttribute="centerX" secondItem="UMC-X1-HWx" secondAttribute="centerX" id="tmw-pm-8WA"/>
+                            <constraint firstItem="yUP-bI-aP8" firstAttribute="top" secondItem="UMC-X1-HWx" secondAttribute="top" id="xcp-vD-CnE"/>
                             <constraint firstItem="2G8-hm-cNf" firstAttribute="bottom" secondItem="cuN-Ha-TPt" secondAttribute="bottom" constant="20" id="zdh-wG-6PZ"/>
                             <constraint firstItem="2G8-hm-cNf" firstAttribute="trailing" secondItem="cuo-29-teO" secondAttribute="trailing" constant="18" id="zpk-5x-i9Y"/>
                         </constraints>
@@ -66,7 +86,9 @@
                     </view>
                     <connections>
                         <outlet property="angleSlider" destination="ZJX-LT-bml" id="wwe-Y3-tLz"/>
+                        <outlet property="goalLabel" destination="kWV-fN-53N" id="bSX-ue-sdO"/>
                         <outlet property="intensitySlider" destination="cuo-29-teO" id="ZAo-M3-kBo"/>
+                        <outlet property="restingLabel" destination="yUP-bI-aP8" id="CHb-xL-NlY"/>
                         <outlet property="sceneView" destination="Im1-8g-yTg" id="byM-gK-3sk"/>
                     </connections>
                 </viewController>
