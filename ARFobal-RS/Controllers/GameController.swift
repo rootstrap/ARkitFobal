@@ -188,7 +188,7 @@ extension GameController: SCNPhysicsContactDelegate {
 
 extension GameController: SCNSceneRendererDelegate{
     func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
-        guard let ballPhysicsBody = ball?.ballNode?.physicsBody else{
+        guard let ballPhysicsBody = ball?.ballNode?.physicsBody else {
             return
         }
         
