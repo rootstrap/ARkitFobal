@@ -7,8 +7,8 @@
 //
 
 enum BallState {
-    case NOT_PLACED
-    case PLACED
-    case SHOT
-    case RESTING
+    case notPlaced
+    case placed
+    case shot
+    case resting
 }

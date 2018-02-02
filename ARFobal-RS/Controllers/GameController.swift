@@ -25,7 +25,7 @@ class GameController: UIViewController {
   
   var goalPlaced = false
   var madeGoal = false
-  var ballIsResting = false;
+  var ballIsResting = false
     
   var goalLblOriginRect: CGRect?
     
@@ -94,7 +94,7 @@ class GameController: UIViewController {
         angleSlider.maximumValue = Float(hitResult.distance * 200)
       } else {
         madeGoal = false
-        ball?.state = BallState.PLACED
+        ball?.state = .placed
         ball?.removeFromParentNode()
         ball?.ballNode?.removeFromParentNode()
         ball = Ball(goalScale: goalScale)
@@ -107,14 +107,14 @@ class GameController: UIViewController {
   }
   
   @IBAction func shoot(_ sender: Any) {
-    if ball?.state == BallState.SHOT || ball?.state == BallState.RESTING{
-        return;
+    if ball?.state == .shot || ball?.state == .resting {
+        return
     }
     
-    ball?.state = BallState.SHOT
+    ball?.state = .shot
     
     ballIsResting = false
-    self.restingLabel!.text = "Not Resting"
+    restingLabel.text = "Not Resting"
 
     guard let currentFrame = self.sceneView.session.currentFrame, ball != nil else {
       return
@@ -157,7 +157,7 @@ extension GameController: ARSCNViewDelegate {
 extension GameController: SCNPhysicsContactDelegate {
   func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
 
-    if !madeGoal && ((contact.nodeA.name == "GoalLinePlane" && contact.nodeB.name == "ball") || (contact.nodeA.name == "ball" && contact.nodeB.name == "GoalLinePlane")){
+    if !madeGoal && ((contact.nodeA.name == "GoalLinePlane" && contact.nodeB.name == "ball") || (contact.nodeA.name == "ball" && contact.nodeB.name == "GoalLinePlane")) {
         madeGoal = true
         
         createExplosion(position: contact.contactPoint, rotation: (ball?.ballNode?.presentation.rotation)!)
@@ -193,10 +193,10 @@ extension GameController: SCNSceneRendererDelegate{
         }
         
         let currentVelocity = ballPhysicsBody.velocity
-        if(ball?.state == BallState.SHOT &&
+        if ball?.state == .shot &&
             abs(currentVelocity.x) < restingVelocityThreshold.x &&
             abs(currentVelocity.y) < restingVelocityThreshold.y &&
-            abs(currentVelocity.z) < restingVelocityThreshold.z){
+            abs(currentVelocity.z) < restingVelocityThreshold.z {
             ballIsResting = true
             DispatchQueue.main.async{
                 self.restingLabel!.text = "Resting"

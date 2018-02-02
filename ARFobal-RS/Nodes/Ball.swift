@@ -13,7 +13,7 @@ class Ball: SCNNode {
   
   var ballNode: SCNNode?
     
-  var state: BallState = BallState.NOT_PLACED
+  var state: BallState = .notPlaced
     
   init(goalScale: Float) {
     super.init()
