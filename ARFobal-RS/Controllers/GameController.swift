@@ -96,8 +96,8 @@ class GameController: UIViewController {
         let scenario1 = Scenario1()
         if scenarioNode == nil {
           scenarioNode = SCNNode()
-          scenarioNode?.scale = (goal?.goalNode?.scale)!
-          scenarioNode?.position = (goal?.goalNode?.position)!
+          scenarioNode?.scale = goal!.goalNode!.scale
+          scenarioNode?.position = goal!.goalNode!.position
           scenarioNode?.constraints = goal?.goalNode?.constraints
           sceneView.scene.rootNode.addChildNode(scenarioNode!)
         }

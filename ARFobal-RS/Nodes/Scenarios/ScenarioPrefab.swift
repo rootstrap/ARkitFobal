@@ -9,7 +9,7 @@
 import Foundation
 import SceneKit
 
-class ScenarioPrefab{
+class ScenarioPrefab {
   var node: SCNNode!
   
   func setup(scenarioNode: SCNNode) {

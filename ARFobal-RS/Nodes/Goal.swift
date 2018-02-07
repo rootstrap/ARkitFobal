@@ -63,7 +63,7 @@ class Goal: SCNNode {
   
   func setupGoalkeeper() {
     if let scene = SCNScene(named: "art.scnassets/dummy/dummy.dae"),
-      let goalkeeperNode = scene.rootNode.childNode(withName: "Dummy", recursively: true){
+      let goalkeeperNode = scene.rootNode.childNode(withName: "Dummy", recursively: true) {
       
       let eulerAngles = SCNVector3(0, GLKMathDegreesToRadians(90), 0)
       goalkeeperNode.eulerAngles = eulerAngles
@@ -72,7 +72,7 @@ class Goal: SCNNode {
       
       goalkeeperNode.position = SCNVector3(0, 50, -50)
       
-      goalkeeperNode.scale = SCNVector3(10,10,10)
+      goalkeeperNode.scale = SCNVector3(10, 10, 10)
       
       goalkeeperNode.physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
       

@@ -32,9 +32,7 @@ class Scenario1 : ScenarioPrefab {
     scenarioNode.addChildNode(dummy)
     
     dummy.position = position
-    
     dummy.scale = scale
-    
     dummy.physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
   }
 }
