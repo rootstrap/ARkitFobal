@@ -61,6 +61,32 @@ class Goal: SCNNode {
 
   }
   
+  func setupGoalkeeper() {
+    if let scene = SCNScene(named: "art.scnassets/dummy/dummy.dae"),
+      let goalkeeperNode = scene.rootNode.childNode(withName: "Dummy", recursively: true) {
+      
+      let eulerAngles = SCNVector3(0, GLKMathDegreesToRadians(90), 0)
+      goalkeeperNode.eulerAngles = eulerAngles
+      
+      goalNode?.addChildNode(goalkeeperNode)
+      
+      goalkeeperNode.position = SCNVector3(0, 50, -50)
+      
+      goalkeeperNode.scale = SCNVector3(10, 10, 10)
+      
+      goalkeeperNode.physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
+      
+      let startRight = SCNAction.move(to: SCNVector3(100, 50, -50), duration: 1.5)
+      let moveLeft = SCNAction.move(to: SCNVector3(-100, 50, -50), duration: 3.0)
+      let moveRight = SCNAction.move(to: SCNVector3(100, 50, -50), duration: 3.0)
+      goalkeeperNode.runAction(startRight, completionHandler: {
+        let moveSequence = SCNAction.sequence([moveLeft, moveRight])
+        let moveLoop = SCNAction.repeatForever(moveSequence)
+        goalkeeperNode.runAction(moveLoop)
+      })
+    }
+  }
+  
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

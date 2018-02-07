@@ -9,6 +9,7 @@
 import UIKit
 import SceneKit
 import ARKit
+import Foundation
 
 class GameController: UIViewController {
   
@@ -21,6 +22,7 @@ class GameController: UIViewController {
   private var field: Field?
   private var goal: Goal?
   private var ball: Ball?
+  private var scenarioNode: SCNNode?
   var goalScale: Float = 1.0
   
   var goalPlaced = false
@@ -84,11 +86,24 @@ class GameController: UIViewController {
         return
       }
       
-    if !goalPlaced {
+      if !goalPlaced {
         sceneView.session.run(ARWorldTrackingConfiguration())
         goal = Goal(hitResult: hitResult, sceneView: sceneView)
         sceneView.scene.rootNode.addChildNode(goal!.goalNode!)
+        goal?.setupGoalkeeper()
         goalScale = Float(hitResult.distance * 0.002)
+        
+        let scenario1 = Scenario1()
+        if scenarioNode == nil {
+          scenarioNode = SCNNode()
+          scenarioNode?.scale = goal!.goalNode!.scale
+          scenarioNode?.position = goal!.goalNode!.position
+          scenarioNode?.constraints = goal?.goalNode?.constraints
+          sceneView.scene.rootNode.addChildNode(scenarioNode!)
+        }
+        
+        scenario1.setup(scenarioNode: scenarioNode!)
+        
         goalPlaced = true
         intensitySlider.maximumValue = Float(hitResult.distance * 200)
         angleSlider.maximumValue = Float(hitResult.distance * 200)
@@ -99,8 +114,8 @@ class GameController: UIViewController {
         ball?.ballNode?.removeFromParentNode()
         ball = Ball(goalScale: goalScale)
         ball!.ballNode!.position = SCNVector3(hitResult.worldTransform.columns.3.x,
-                              hitResult.worldTransform.columns.3.y + 0.1,
-                              hitResult.worldTransform.columns.3.z)
+                                hitResult.worldTransform.columns.3.y + 0.1,
+                                hitResult.worldTransform.columns.3.z)
         sceneView.scene.rootNode.addChildNode(ball!.ballNode!)
       }
     }
