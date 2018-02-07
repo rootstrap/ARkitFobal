@@ -11,6 +11,8 @@
 		8421C5951FFFC9DD003FC3D4 /* Goal Particle System.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 8421C5931FFFC9DD003FC3D4 /* Goal Particle System.scnp */; };
 		8421C5961FFFC9DD003FC3D4 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 8421C5941FFFC9DD003FC3D4 /* star.png */; };
 		84D6A968202384260047DB78 /* SCNVector3Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D6A967202384260047DB78 /* SCNVector3Extensions.swift */; };
+		84D8EC202024B70600C1EFA5 /* ScenarioPrefab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D8EC1F2024B70600C1EFA5 /* ScenarioPrefab.swift */; };
+		84D8EC232024B7FF00C1EFA5 /* Scenario1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D8EC222024B7FF00C1EFA5 /* Scenario1.swift */; };
 		86B0AEBE1F59F6530049C510 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B0AEBD1F59F6530049C510 /* AppDelegate.swift */; };
 		86B0AEC01F59F6530049C510 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 86B0AEBF1F59F6530049C510 /* art.scnassets */; };
 		86B0AEC51F59F6530049C510 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86B0AEC31F59F6530049C510 /* Main.storyboard */; };
@@ -28,6 +30,8 @@
 		8421C5931FFFC9DD003FC3D4 /* Goal Particle System.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; path = "Goal Particle System.scnp"; sourceTree = "<group>"; };
 		8421C5941FFFC9DD003FC3D4 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
 		84D6A967202384260047DB78 /* SCNVector3Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNVector3Extensions.swift; sourceTree = "<group>"; };
+		84D8EC1F2024B70600C1EFA5 /* ScenarioPrefab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioPrefab.swift; sourceTree = "<group>"; };
+		84D8EC222024B7FF00C1EFA5 /* Scenario1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenario1.swift; sourceTree = "<group>"; };
 		86B0AEBA1F59F6530049C510 /* ARFobal-RS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ARFobal-RS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B0AEBD1F59F6530049C510 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86B0AEBF1F59F6530049C510 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -70,6 +74,15 @@
 			path = Particles;
 			sourceTree = "<group>";
 		};
+		84D8EC212024B7EA00C1EFA5 /* Scenarios */ = {
+			isa = PBXGroup;
+			children = (
+				84D8EC1F2024B70600C1EFA5 /* ScenarioPrefab.swift */,
+				84D8EC222024B7FF00C1EFA5 /* Scenario1.swift */,
+			);
+			path = Scenarios;
+			sourceTree = "<group>";
+		};
 		86B0AEB11F59F6530049C510 = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +120,7 @@
 		90447D4E1F62D36000905BEC /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
+				84D8EC212024B7EA00C1EFA5 /* Scenarios */,
 				90447D4F1F62D37300905BEC /* Field.swift */,
 				908CA57F1F632D1F00E26E22 /* Goal.swift */,
 				90AF90E11F6C6BD5000DA18C /* Ball.swift */,
@@ -225,9 +239,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				90AF90E21F6C6BD5000DA18C /* Ball.swift in Sources */,
+				84D8EC232024B7FF00C1EFA5 /* Scenario1.swift in Sources */,
 				905983D11F618C850064655C /* GameController.swift in Sources */,
 				90447D551F62D5D100905BEC /* BodyType.swift in Sources */,
 				8417BD9F202222CA007E6874 /* BallState.swift in Sources */,
+				84D8EC202024B70600C1EFA5 /* ScenarioPrefab.swift in Sources */,
 				86B0AEBE1F59F6530049C510 /* AppDelegate.swift in Sources */,
 				908CA5801F632D1F00E26E22 /* Goal.swift in Sources */,
 				90447D501F62D37300905BEC /* Field.swift in Sources */,
@@ -369,7 +385,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8T2BY9Q724;
+				DEVELOPMENT_TEAM = KYF5PFPW7U;
 				INFOPLIST_FILE = "ARFobal-RS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Rootstrap.ARFobal-RS";
@@ -384,7 +400,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8T2BY9Q724;
+				DEVELOPMENT_TEAM = KYF5PFPW7U;
 				INFOPLIST_FILE = "ARFobal-RS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Rootstrap.ARFobal-RS";
