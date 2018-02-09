@@ -21,7 +21,7 @@ class Goal: SCNNode {
     let currentPlace = SCNNode()
     currentPlace.position = camProjection
     
-    if let scene = SCNScene(named: "art.scnassets/soccer-goal/goal2.dae"),
+    if let scene = SCNScene(named: "art.scnassets/soccer-goal/goal.dae"),
       let node = scene.rootNode.childNode(withName: "goal", recursively: true) {
       
       let goalLinePlane = node.childNode(withName: "GoalLinePlane", recursively: true)

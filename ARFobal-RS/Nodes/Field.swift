@@ -23,8 +23,8 @@ class Field: SCNNode {
   }
   
   private func setup() {
-    //IA: The ball appears to roll off the plane if the height of this box isn't at least 0.015, the same thing happens with a plane
-    planeGeometry = SCNBox(width: CGFloat(anchorPoint.extent.x), height: 0.015, length: CGFloat(anchorPoint.extent.z), chamferRadius: 0)
+    //IA: The ball appears to roll off the plane if the height of this box isn't at least 0.025, the same thing happens with a plane
+    planeGeometry = SCNBox(width: CGFloat(anchorPoint.extent.x), height: 0.025, length: CGFloat(anchorPoint.extent.z), chamferRadius: 0)
     
     let material = SCNMaterial()
     material.diffuse.contents = UIImage(named:"grass-2")

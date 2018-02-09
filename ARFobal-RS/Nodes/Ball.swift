@@ -37,9 +37,9 @@ class Ball: SCNNode {
     let body = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: SCNPhysicsShape(geometry: sphere, options: nil))
     body.isAffectedByGravity = true
     body.mass = 0.5
-    body.restitution = 0.5
+    body.restitution = 1.2
     body.damping = 0.9
-    body.angularDamping = 0.999
+    body.angularDamping = 0.99
     body.friction = 0.8
     body.rollingFriction = 0.8
     body.categoryBitMask = BodyType.ball.rawValue
