@@ -13,13 +13,15 @@ class Scenario1 : ScenarioPrefab {
   
   var dummyNode: SCNNode!
   
-  override func setup(scenarioNode: SCNNode) {
+  override func setup(scenarioNode: SCNNode, goalScale: Float) {
     if let scene = SCNScene(named: "art.scnassets/dummy/dummy.dae"){
       
       dummyNode = scene.rootNode.childNode(withName: "Dummy", recursively: true)
       
       setDummy(scenarioNode: scenarioNode, position: SCNVector3(-25, 50, -280), scale: SCNVector3(10,10,10))
       setDummy(scenarioNode: scenarioNode, position: SCNVector3(25, 50, -280), scale: SCNVector3(10,10,10))
+      
+      ballInitialPosition = SCNVector3(0, 50, -380)
     }
   }
   

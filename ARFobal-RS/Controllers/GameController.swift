@@ -17,18 +17,19 @@ class GameController: UIViewController {
   @IBOutlet weak var intensitySlider: UISlider!
   @IBOutlet weak var angleSlider: UISlider!
   @IBOutlet weak var goalLabel: UILabel!
-  @IBOutlet weak var restingLabel: UILabel!
+  @IBOutlet weak var targetView: UIView!
   
   private var field: Field?
   private var goal: Goal?
   private var ball: Ball?
+  private var currentScenario: ScenarioPrefab?
   private var scenarioNode: SCNNode?
   var goalScale: Float = 1.0
   
   var goalPlaced = false
   var madeGoal = false
   var ballIsResting = false
-    
+  
   var goalLblOriginRect: CGRect?
     
   var restingVelocityThreshold: SCNVector3 = SCNVector3Make(0.001, 0.001, 0.001)
@@ -93,17 +94,42 @@ class GameController: UIViewController {
         goal?.setupGoalkeeper()
         goalScale = Float(hitResult.distance * 0.002)
         
-        let scenario1 = Scenario1()
+        currentScenario = Scenario1()
         if scenarioNode == nil {
           scenarioNode = SCNNode()
           scenarioNode?.scale = goal!.goalNode!.scale
-          scenarioNode?.position = goal!.goalNode!.position
+          scenarioNode?.worldPosition = goal!.goalNode!.worldPosition
           scenarioNode?.constraints = goal?.goalNode?.constraints
           sceneView.scene.rootNode.addChildNode(scenarioNode!)
         }
+
+        currentScenario?.setup(scenarioNode: scenarioNode!, goalScale: goalScale)
         
-        scenario1.setup(scenarioNode: scenarioNode!)
+        /*
+        let scenario1 = SCNScene(named: "art.scnassets/scenario1.scn")
         
+        let scenarioNode = scenario1?.rootNode.childNode(withName: "Scenario1", recursively: true)
+        let laTarget = scenario1?.rootNode.childNode(withName: "laTarget", recursively: false)
+        
+        scenarioNode?.position = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
+        let camProjection = SCNVector3(sceneView.pointOfView!.position.x, hitResult.worldTransform.columns.3.y, sceneView.pointOfView!.position.z)
+        
+        let currentPlace = SCNNode()
+        sceneView.scene.rootNode.addChildNode(currentPlace)
+        currentPlace.position = camProjection
+        
+        scenarioNode?.constraints = [SCNLookAtConstraint(target: currentPlace)]
+        
+        scenarioNode?.scale = SCNVector3(0.1, 0.1, 0.1) //TODO: This scale should use the distance to the plane as a parameter
+        
+        sceneView.scene.rootNode.addChildNode(scenarioNode!)
+        sceneView.scene.rootNode.addChildNode(laTarget!)
+        
+        let goalLinePlane = scenarioNode?.childNode(withName: "GoalLinePlane", recursively: true)
+        goalLinePlane?.geometry?.firstMaterial?.diffuse.contents = UIColor.clear
+        //TODO: Set up collision and contact bit masks to the goal
+        */
+
         goalPlaced = true
         intensitySlider.maximumValue = Float(hitResult.distance * 200)
         angleSlider.maximumValue = Float(hitResult.distance * 200)
@@ -112,11 +138,11 @@ class GameController: UIViewController {
         ball?.state = .placed
         ball?.removeFromParentNode()
         ball?.ballNode?.removeFromParentNode()
-        ball = Ball(goalScale: goalScale)
-        ball!.ballNode!.position = SCNVector3(hitResult.worldTransform.columns.3.x,
-                                hitResult.worldTransform.columns.3.y + 0.1,
-                                hitResult.worldTransform.columns.3.z)
-        sceneView.scene.rootNode.addChildNode(ball!.ballNode!)
+        ball = Ball(goalScale: goalScale * 200)
+        currentScenario?.ball = ball!
+
+        ball!.ballNode!.position = currentScenario!.ballInitialPosition
+        scenarioNode!.addChildNode(ball!.ballNode!)
       }
     }
   }
@@ -129,8 +155,7 @@ class GameController: UIViewController {
     ball?.state = .shot
     
     ballIsResting = false
-    restingLabel.text = "Not Resting"
-
+    
     guard let currentFrame = self.sceneView.session.currentFrame, ball != nil else {
       return
     }
@@ -160,6 +185,10 @@ extension GameController: ARSCNViewDelegate {
     let plane = Field(anchor: planeAnchor)
     field = plane
     node.addChildNode(plane)
+    
+    DispatchQueue.main.async {
+      self.targetView.isHidden = true
+    }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -213,9 +242,6 @@ extension GameController: SCNSceneRendererDelegate{
             abs(currentVelocity.y) < restingVelocityThreshold.y &&
             abs(currentVelocity.z) < restingVelocityThreshold.z {
             ballIsResting = true
-            DispatchQueue.main.async{
-                self.restingLabel!.text = "Resting"
-            }
         }
     }
 }
