@@ -15,5 +15,9 @@ class ScenarioPrefab {
   
   func setup(scenarioNode: SCNNode, goalScale: Float) {
     preconditionFailure("This method must be overriden")
-  }  
+  }
+  
+  func remove(){
+    preconditionFailure("This method must be overriden")
+  }
 }

@@ -74,13 +74,15 @@
                                 <size key="shadowOffset" width="1" height="-1"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4RJ-Jp-5N3" userLabel="Reset Button">
-                                <rect key="frame" x="315" y="0.0" width="60" height="30"/>
+                                <rect key="frame" x="308" y="0.0" width="67" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <inset key="titleEdgeInsets" minX="2" minY="0.0" maxX="2" maxY="0.0"/>
                                 <size key="titleShadowOffset" width="2" height="2"/>
                                 <state key="normal" title="Reset">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="reset:" destination="BV1-FR-VrT" eventType="touchUpInside" id="MMP-uO-RXz"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

@@ -42,7 +42,6 @@ class GameController: UIViewController {
     
     sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, SCNDebugOptions.showPhysicsShapes]
     sceneView.delegate = self
-    sceneView.showsStatistics = true;
     sceneView.scene.physicsWorld.contactDelegate = self
     registerGestureRecognizers()
   }
@@ -65,7 +64,7 @@ class GameController: UIViewController {
     let configuration = ARWorldTrackingConfiguration()
     configuration.planeDetection = .horizontal
     
-    sceneView.session.run(configuration)
+    sceneView.session.run(configuration, options: [.removeExistingAnchors, .resetTracking])
   }
   
   //MARK: Actions
@@ -163,6 +162,22 @@ class GameController: UIViewController {
     let rotatedForce = simd_mul(currentFrame.camera.transform, force)
     let vectorForce = SCNVector3(rotatedForce.x, angleSlider.value, rotatedForce.z)
     ball!.ballNode!.physicsBody?.applyForce(vectorForce, asImpulse: false)
+  }
+  
+  @IBAction func reset(_ sender: Any) {
+    goal?.goalNode?.removeFromParentNode()
+    ball?.ballNode?.removeFromParentNode()
+    field?.removeFromParentNode()
+    scenarioNode?.removeFromParentNode()
+    
+    field = nil
+    scenarioNode = nil
+    
+    goalPlaced = false
+    
+    targetView.isHidden = false
+    
+    setSceneConf()
   }
 }
 
