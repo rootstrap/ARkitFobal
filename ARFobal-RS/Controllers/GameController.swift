@@ -16,6 +16,7 @@ class GameController: UIViewController {
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var intensitySlider: UISlider!
   @IBOutlet weak var angleSlider: UISlider!
+  @IBOutlet weak var shootButton: UIButton!
   @IBOutlet weak var goalLabel: UILabel!
   @IBOutlet weak var targetView: UIView!
   
@@ -103,31 +104,6 @@ class GameController: UIViewController {
         }
 
         currentScenario?.setup(scenarioNode: scenarioNode!, goalScale: goalScale)
-        
-        /*
-        let scenario1 = SCNScene(named: "art.scnassets/scenario1.scn")
-        
-        let scenarioNode = scenario1?.rootNode.childNode(withName: "Scenario1", recursively: true)
-        let laTarget = scenario1?.rootNode.childNode(withName: "laTarget", recursively: false)
-        
-        scenarioNode?.position = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
-        let camProjection = SCNVector3(sceneView.pointOfView!.position.x, hitResult.worldTransform.columns.3.y, sceneView.pointOfView!.position.z)
-        
-        let currentPlace = SCNNode()
-        sceneView.scene.rootNode.addChildNode(currentPlace)
-        currentPlace.position = camProjection
-        
-        scenarioNode?.constraints = [SCNLookAtConstraint(target: currentPlace)]
-        
-        scenarioNode?.scale = SCNVector3(0.1, 0.1, 0.1) //TODO: This scale should use the distance to the plane as a parameter
-        
-        sceneView.scene.rootNode.addChildNode(scenarioNode!)
-        sceneView.scene.rootNode.addChildNode(laTarget!)
-        
-        let goalLinePlane = scenarioNode?.childNode(withName: "GoalLinePlane", recursively: true)
-        goalLinePlane?.geometry?.firstMaterial?.diffuse.contents = UIColor.clear
-        //TODO: Set up collision and contact bit masks to the goal
-        */
 
         goalPlaced = true
         intensitySlider.maximumValue = Float(hitResult.distance * 200)
@@ -176,6 +152,9 @@ class GameController: UIViewController {
     goalPlaced = false
     
     targetView.isHidden = false
+    angleSlider.isHidden = true
+    intensitySlider.isHidden = true
+    shootButton.isHidden = true
     
     setSceneConf()
   }
@@ -195,7 +174,12 @@ extension GameController: ARSCNViewDelegate {
     
     //Check if the detection is a new anchor for planes
     guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-        
+    
+    if(!checkPlaneDimensionsAreValid(planeAnchor: planeAnchor)) {
+      // TODO: animate size requirement text
+      return
+    }
+    
     //Add field
     let plane = Field(anchor: planeAnchor)
     field = plane
@@ -203,12 +187,40 @@ extension GameController: ARSCNViewDelegate {
     
     DispatchQueue.main.async {
       self.targetView.isHidden = true
+      self.angleSlider.isHidden = false
+      self.intensitySlider.isHidden = false
+      self.shootButton.isHidden = false
     }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-    if field?.anchorPoint.identifier == anchor.identifier, let fieldAnchor = anchor as? ARPlaneAnchor{
-        field?.update(anchor: fieldAnchor)
+    if let fieldAnchor = anchor as? ARPlaneAnchor{
+      if checkPlaneDimensionsAreValid(planeAnchor: fieldAnchor) {
+        if field != nil && field?.anchorPoint.identifier == anchor.identifier {
+          field?.update(anchor: fieldAnchor)
+        } else {
+          field = Field(anchor: fieldAnchor)
+          node.addChildNode(field!)
+          
+          DispatchQueue.main.async {
+            self.targetView.isHidden = true
+            self.angleSlider.isHidden = false
+            self.intensitySlider.isHidden = false
+            self.shootButton.isHidden = false
+          }
+        }
+      } else {
+        // TODO: animate size requirement text
+      }
+    }
+  }
+  
+  func checkPlaneDimensionsAreValid(planeAnchor: ARPlaneAnchor) -> Bool {
+    if((planeAnchor.extent.x > 1.0 && planeAnchor.extent.z > 1.6) ||
+      (planeAnchor.extent.x > 1.6 && planeAnchor.extent.z > 1.0)) {
+      return true
+    } else {
+      return false
     }
   }
 }
