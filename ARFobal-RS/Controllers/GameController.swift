@@ -19,6 +19,8 @@ class GameController: UIViewController {
   @IBOutlet weak var shootButton: UIButton!
   @IBOutlet weak var goalLabel: UILabel!
   @IBOutlet weak var targetView: UIView!
+  @IBOutlet weak var shootingControlsView: UIView!
+  @IBOutlet weak var verticalArrowImageView: UIImageView!
   
   private var field: Field?
   private var goal: Goal?
@@ -41,7 +43,11 @@ class GameController: UIViewController {
     
     self.goalLblOriginRect = self.goalLabel.frame
     
-    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, SCNDebugOptions.showPhysicsShapes]
+    let transfrom = CGAffineTransform.identity.rotated(by: CGFloat(GLKMathDegreesToRadians(90)))
+    self.verticalArrowImageView.transform = transfrom
+    
+    
+    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
     sceneView.delegate = self
     sceneView.scene.physicsWorld.contactDelegate = self
     registerGestureRecognizers()
@@ -152,9 +158,7 @@ class GameController: UIViewController {
     goalPlaced = false
     
     targetView.isHidden = false
-    angleSlider.isHidden = true
-    intensitySlider.isHidden = true
-    shootButton.isHidden = true
+    shootingControlsView.isHidden = true
     
     setSceneConf()
   }
@@ -187,9 +191,7 @@ extension GameController: ARSCNViewDelegate {
     
     DispatchQueue.main.async {
       self.targetView.isHidden = true
-      self.angleSlider.isHidden = false
-      self.intensitySlider.isHidden = false
-      self.shootButton.isHidden = false
+      self.shootingControlsView.isHidden = false
     }
   }
   
@@ -204,9 +206,7 @@ extension GameController: ARSCNViewDelegate {
           
           DispatchQueue.main.async {
             self.targetView.isHidden = true
-            self.angleSlider.isHidden = false
-            self.intensitySlider.isHidden = false
-            self.shootButton.isHidden = false
+            self.shootingControlsView.isHidden = false
           }
         }
       } else {
