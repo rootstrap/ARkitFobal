@@ -25,7 +25,7 @@ class Ball: SCNNode {
     }
 
     //IA: on very small scales the ball keeps rolling on top of the field when a force is applied to it, increasing the scale seems to have solved the problem
-    let scale = max(0.00125, goalScale * 0.4)
+    let scale = max(0.00125, goalScale)
     node.scale = SCNVector3(scale, scale, scale)
     ballNode = node
     
@@ -33,7 +33,7 @@ class Ball: SCNNode {
   }
   
   private func setup() {
-    let sphere = SCNSphere(radius: CGFloat(38.68 * 0.5 * ballNode!.scale.x))
+    let sphere = SCNSphere(radius: CGFloat(ballNode!.scale.x / 22.5))
     let body = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: SCNPhysicsShape(geometry: sphere, options: nil))
     body.isAffectedByGravity = true
     body.mass = 0.5
@@ -42,9 +42,9 @@ class Ball: SCNNode {
     body.angularDamping = 0.99
     body.friction = 0.8
     body.rollingFriction = 0.8
+    body.allowsResting = true
     body.categoryBitMask = BodyType.ball.rawValue
     self.ballNode!.physicsBody = body
-    self.addChildNode(self.ballNode!)
   }
   
   required init?(coder aDecoder: NSCoder) {

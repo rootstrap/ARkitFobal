@@ -16,19 +16,23 @@ class GameController: UIViewController {
   @IBOutlet var sceneView: ARSCNView!
   @IBOutlet weak var intensitySlider: UISlider!
   @IBOutlet weak var angleSlider: UISlider!
+  @IBOutlet weak var shootButton: UIButton!
   @IBOutlet weak var goalLabel: UILabel!
-  @IBOutlet weak var restingLabel: UILabel!
+  @IBOutlet weak var targetView: UIView!
+  @IBOutlet weak var shootingControlsView: UIView!
+  @IBOutlet weak var verticalArrowImageView: UIImageView!
   
   private var field: Field?
   private var goal: Goal?
   private var ball: Ball?
+  private var currentScenario: ScenarioPrefab?
   private var scenarioNode: SCNNode?
   var goalScale: Float = 1.0
   
   var goalPlaced = false
   var madeGoal = false
   var ballIsResting = false
-    
+  
   var goalLblOriginRect: CGRect?
     
   var restingVelocityThreshold: SCNVector3 = SCNVector3Make(0.001, 0.001, 0.001)
@@ -39,9 +43,11 @@ class GameController: UIViewController {
     
     self.goalLblOriginRect = self.goalLabel.frame
     
-    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, SCNDebugOptions.showPhysicsShapes]
+    let transfrom = CGAffineTransform.identity.rotated(by: CGFloat(GLKMathDegreesToRadians(90)))
+    verticalArrowImageView.transform = transfrom
+    
+    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
     sceneView.delegate = self
-    sceneView.showsStatistics = true;
     sceneView.scene.physicsWorld.contactDelegate = self
     registerGestureRecognizers()
   }
@@ -64,7 +70,7 @@ class GameController: UIViewController {
     let configuration = ARWorldTrackingConfiguration()
     configuration.planeDetection = .horizontal
     
-    sceneView.session.run(configuration)
+    sceneView.session.run(configuration, options: [.removeExistingAnchors, .resetTracking])
   }
   
   //MARK: Actions
@@ -93,17 +99,17 @@ class GameController: UIViewController {
         goal?.setupGoalkeeper()
         goalScale = Float(hitResult.distance * 0.002)
         
-        let scenario1 = Scenario1()
+        currentScenario = Scenario1()
         if scenarioNode == nil {
           scenarioNode = SCNNode()
           scenarioNode?.scale = goal!.goalNode!.scale
-          scenarioNode?.position = goal!.goalNode!.position
+          scenarioNode?.worldPosition = goal!.goalNode!.worldPosition
           scenarioNode?.constraints = goal?.goalNode?.constraints
           sceneView.scene.rootNode.addChildNode(scenarioNode!)
         }
-        
-        scenario1.setup(scenarioNode: scenarioNode!)
-        
+
+        currentScenario?.setup(scenarioNode: scenarioNode!, goalScale: goalScale)
+
         goalPlaced = true
         intensitySlider.maximumValue = Float(hitResult.distance * 200)
         angleSlider.maximumValue = Float(hitResult.distance * 200)
@@ -112,11 +118,11 @@ class GameController: UIViewController {
         ball?.state = .placed
         ball?.removeFromParentNode()
         ball?.ballNode?.removeFromParentNode()
-        ball = Ball(goalScale: goalScale)
-        ball!.ballNode!.position = SCNVector3(hitResult.worldTransform.columns.3.x,
-                                hitResult.worldTransform.columns.3.y + 0.1,
-                                hitResult.worldTransform.columns.3.z)
-        sceneView.scene.rootNode.addChildNode(ball!.ballNode!)
+        ball = Ball(goalScale: goalScale * 200)
+        currentScenario?.ball = ball!
+
+        ball!.ballNode!.position = currentScenario!.ballInitialPosition
+        scenarioNode!.addChildNode(ball!.ballNode!)
       }
     }
   }
@@ -129,8 +135,7 @@ class GameController: UIViewController {
     ball?.state = .shot
     
     ballIsResting = false
-    restingLabel.text = "Not Resting"
-
+    
     guard let currentFrame = self.sceneView.session.currentFrame, ball != nil else {
       return
     }
@@ -138,6 +143,23 @@ class GameController: UIViewController {
     let rotatedForce = simd_mul(currentFrame.camera.transform, force)
     let vectorForce = SCNVector3(rotatedForce.x, angleSlider.value, rotatedForce.z)
     ball!.ballNode!.physicsBody?.applyForce(vectorForce, asImpulse: false)
+  }
+  
+  @IBAction func reset(_ sender: Any) {
+    goal?.goalNode?.removeFromParentNode()
+    ball?.ballNode?.removeFromParentNode()
+    field?.removeFromParentNode()
+    scenarioNode?.removeFromParentNode()
+    
+    field = nil
+    scenarioNode = nil
+    
+    goalPlaced = false
+    
+    targetView.isHidden = false
+    shootingControlsView.isHidden = true
+    
+    setSceneConf()
   }
 }
 
@@ -155,16 +177,49 @@ extension GameController: ARSCNViewDelegate {
     
     //Check if the detection is a new anchor for planes
     guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-        
+    
+    if !checkPlaneDimensionsAreValid(planeAnchor: planeAnchor) {
+      // TODO: animate size requirement text
+      return
+    }
+    
     //Add field
     let plane = Field(anchor: planeAnchor)
     field = plane
     node.addChildNode(plane)
+    
+    DispatchQueue.main.async {
+      self.targetView.isHidden = true
+      self.shootingControlsView.isHidden = false
+    }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-    if field?.anchorPoint.identifier == anchor.identifier, let fieldAnchor = anchor as? ARPlaneAnchor{
-        field?.update(anchor: fieldAnchor)
+    if let fieldAnchor = anchor as? ARPlaneAnchor {
+      if checkPlaneDimensionsAreValid(planeAnchor: fieldAnchor) {
+        if field != nil && field?.anchorPoint.identifier == anchor.identifier {
+          field?.update(anchor: fieldAnchor)
+        } else {
+          field = Field(anchor: fieldAnchor)
+          node.addChildNode(field!)
+          
+          DispatchQueue.main.async {
+            self.targetView.isHidden = true
+            self.shootingControlsView.isHidden = false
+          }
+        }
+      } else {
+        // TODO: animate size requirement text
+      }
+    }
+  }
+  
+  func checkPlaneDimensionsAreValid(planeAnchor: ARPlaneAnchor) -> Bool {
+    if (planeAnchor.extent.x > 1.0 && planeAnchor.extent.z > 1.6) ||
+      (planeAnchor.extent.x > 1.6 && planeAnchor.extent.z > 1.0) {
+      return true
+    } else {
+      return false
     }
   }
 }
@@ -213,9 +268,6 @@ extension GameController: SCNSceneRendererDelegate{
             abs(currentVelocity.y) < restingVelocityThreshold.y &&
             abs(currentVelocity.z) < restingVelocityThreshold.z {
             ballIsResting = true
-            DispatchQueue.main.async{
-                self.restingLabel!.text = "Resting"
-            }
         }
     }
 }

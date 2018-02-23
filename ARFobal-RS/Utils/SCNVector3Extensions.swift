@@ -230,3 +230,7 @@ func SCNVector3Project(vectorToProject: SCNVector3, projectionVector: SCNVector3
     let v: SCNVector3 = projectionVector * scale
     return v
 }
+
+func SCNVector3RadiansFromDegrees(degreesRotation: SCNVector3) -> SCNVector3 {
+  return SCNVector3(GLKMathDegreesToRadians(degreesRotation.x), GLKMathDegreesToRadians(degreesRotation.y), GLKMathDegreesToRadians(degreesRotation.z))
+}

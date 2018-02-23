@@ -10,10 +10,14 @@ import Foundation
 import SceneKit
 
 class ScenarioPrefab {
-  var node: SCNNode!
+  var ball: Ball!
+  var ballInitialPosition: SCNVector3!
   
-  func setup(scenarioNode: SCNNode) {
+  func setup(scenarioNode: SCNNode, goalScale: Float) {
+    preconditionFailure("This method must be overriden")
+  }
+  
+  func remove(){
     preconditionFailure("This method must be overriden")
   }
 }
-
