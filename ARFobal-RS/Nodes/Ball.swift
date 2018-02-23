@@ -33,7 +33,7 @@ class Ball: SCNNode {
   }
   
   private func setup() {
-    let sphere = SCNSphere(radius: CGFloat(ballNode!.scale.x/22.5))
+    let sphere = SCNSphere(radius: CGFloat(ballNode!.scale.x / 22.5))
     let body = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: SCNPhysicsShape(geometry: sphere, options: nil))
     body.isAffectedByGravity = true
     body.mass = 0.5

@@ -44,8 +44,7 @@ class GameController: UIViewController {
     self.goalLblOriginRect = self.goalLabel.frame
     
     let transfrom = CGAffineTransform.identity.rotated(by: CGFloat(GLKMathDegreesToRadians(90)))
-    self.verticalArrowImageView.transform = transfrom
-    
+    verticalArrowImageView.transform = transfrom
     
     sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
     sceneView.delegate = self
@@ -179,7 +178,7 @@ extension GameController: ARSCNViewDelegate {
     //Check if the detection is a new anchor for planes
     guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
     
-    if(!checkPlaneDimensionsAreValid(planeAnchor: planeAnchor)) {
+    if !checkPlaneDimensionsAreValid(planeAnchor: planeAnchor) {
       // TODO: animate size requirement text
       return
     }
@@ -196,7 +195,7 @@ extension GameController: ARSCNViewDelegate {
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-    if let fieldAnchor = anchor as? ARPlaneAnchor{
+    if let fieldAnchor = anchor as? ARPlaneAnchor {
       if checkPlaneDimensionsAreValid(planeAnchor: fieldAnchor) {
         if field != nil && field?.anchorPoint.identifier == anchor.identifier {
           field?.update(anchor: fieldAnchor)
@@ -216,8 +215,8 @@ extension GameController: ARSCNViewDelegate {
   }
   
   func checkPlaneDimensionsAreValid(planeAnchor: ARPlaneAnchor) -> Bool {
-    if((planeAnchor.extent.x > 1.0 && planeAnchor.extent.z > 1.6) ||
-      (planeAnchor.extent.x > 1.6 && planeAnchor.extent.z > 1.0)) {
+    if (planeAnchor.extent.x > 1.0 && planeAnchor.extent.z > 1.6) ||
+      (planeAnchor.extent.x > 1.6 && planeAnchor.extent.z > 1.0) {
       return true
     } else {
       return false
