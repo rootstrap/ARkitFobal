@@ -46,5 +46,7 @@ class Scenario1 : ScenarioPrefab {
     dummies.forEach { (dummy) in
       dummy.removeFromParentNode()
     }
+    
+    dummies.removeAll()
   }
 }

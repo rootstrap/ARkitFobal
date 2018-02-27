@@ -46,7 +46,7 @@ class GameController: UIViewController {
     let transfrom = CGAffineTransform.identity.rotated(by: CGFloat(GLKMathDegreesToRadians(90)))
     verticalArrowImageView.transform = transfrom
     
-    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, .showPhysicsShapes]
     sceneView.delegate = self
     sceneView.scene.physicsWorld.contactDelegate = self
     registerGestureRecognizers()
@@ -94,7 +94,9 @@ class GameController: UIViewController {
       
       if !goalPlaced {
         sceneView.session.run(ARWorldTrackingConfiguration())
-        goal = Goal(hitResult: hitResult, sceneView: sceneView)
+        let worldPos = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
+        let distance = hitResult.distance
+        goal = Goal(distance: distance, worldPosition: worldPos, sceneView: sceneView)
         sceneView.scene.rootNode.addChildNode(goal!.goalNode!)
         goal?.setupGoalkeeper()
         goalScale = Float(hitResult.distance * 0.002)
@@ -192,6 +194,7 @@ extension GameController: ARSCNViewDelegate {
       self.targetView.isHidden = true
       self.shootingControlsView.isHidden = false
     }
+    
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -199,13 +202,38 @@ extension GameController: ARSCNViewDelegate {
       if checkPlaneDimensionsAreValid(planeAnchor: fieldAnchor) {
         if field != nil && field?.anchorPoint.identifier == anchor.identifier {
           field?.update(anchor: fieldAnchor)
+          goal!.goalNode!.position = SCNVector3(fieldAnchor.center.x, 0, fieldAnchor.center.z + fieldAnchor.extent.z / 3.0)
         } else {
           field = Field(anchor: fieldAnchor)
           node.addChildNode(field!)
           
+          //place goal
+          let worldPos = SCNVector3(fieldAnchor.transform.columns.3.x + fieldAnchor.center.x, fieldAnchor.transform.columns.3.y + fieldAnchor.center.y, fieldAnchor.transform.columns.3.y + fieldAnchor.center.z)
+          let distance = GLKVector3Distance(SCNVector3ToGLKVector3(worldPos), SCNVector3ToGLKVector3(sceneView.pointOfView!.presentation.worldPosition))
+          goal = Goal(distance: CGFloat(distance), worldPosition: worldPos, sceneView: sceneView)
+          field!.addChildNode(goal!.goalNode!)
+          goal!.goalNode!.position = SCNVector3(fieldAnchor.center.x, 0, fieldAnchor.center.z + fieldAnchor.extent.z / 4.0)
+          
+          goal?.setupGoalkeeper()
+          goalScale = Float(distance * 0.002)
+          
+          currentScenario = Scenario1()
+          if scenarioNode == nil {
+            scenarioNode = SCNNode()
+            scenarioNode?.scale = goal!.goalNode!.scale
+            scenarioNode?.constraints = goal?.goalNode?.constraints
+            field!.addChildNode(scenarioNode!)
+            scenarioNode!.position = goal!.goalNode!.position
+          }
+          
+          currentScenario?.setup(scenarioNode: scenarioNode!, goalScale: goalScale)
+          
+          goalPlaced = true
           DispatchQueue.main.async {
             self.targetView.isHidden = true
             self.shootingControlsView.isHidden = false
+            self.intensitySlider.maximumValue = distance * 200
+            self.angleSlider.maximumValue = distance * 200
           }
         }
       } else {
