@@ -25,7 +25,7 @@ class Ball: SCNNode {
     }
 
     //IA: on very small scales the ball keeps rolling on top of the field when a force is applied to it, increasing the scale seems to have solved the problem
-    let scale = max(0.00125, goalScale)
+    let scale = max(0.7, goalScale)
     node.scale = SCNVector3(scale, scale, scale)
     ballNode = node
     
