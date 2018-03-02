@@ -46,7 +46,6 @@ class GameController: UIViewController {
     let transfrom = CGAffineTransform.identity.rotated(by: CGFloat(GLKMathDegreesToRadians(90)))
     verticalArrowImageView.transform = transfrom
     
-//    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, .showPhysicsShapes]
     sceneView.delegate = self
     sceneView.scene.physicsWorld.contactDelegate = self
     registerGestureRecognizers()

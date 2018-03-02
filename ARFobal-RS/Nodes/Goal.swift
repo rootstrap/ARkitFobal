@@ -29,12 +29,6 @@ class Goal: SCNNode {
       let scaleVector = SCNVector3(scale, scale, scale)
       goalNode?.scale = scaleVector
       
-      let camProjection = SCNVector3(sceneView.pointOfView!.position.x, worldPosition.y, sceneView.pointOfView!.position.z)
-      let currentPlace = SCNNode()
-      currentPlace.position = camProjection
-      
-      //goalNode?.constraints = [SCNLookAtConstraint(target: currentPlace)]
-      
       let goalShape = SCNPhysicsShape(node: goalNode!, options: [ .type: SCNPhysicsShape.ShapeType.concavePolyhedron, .scale: scale])
       
       let body = SCNPhysicsBody(type: .kinematic, shape: goalShape)
