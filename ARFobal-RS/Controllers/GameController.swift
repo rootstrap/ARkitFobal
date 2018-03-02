@@ -46,7 +46,7 @@ class GameController: UIViewController {
     let transfrom = CGAffineTransform.identity.rotated(by: CGFloat(GLKMathDegreesToRadians(90)))
     verticalArrowImageView.transform = transfrom
     
-    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, .showPhysicsShapes]
+//    sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, .showPhysicsShapes]
     sceneView.delegate = self
     sceneView.scene.physicsWorld.contactDelegate = self
     registerGestureRecognizers()
@@ -82,50 +82,20 @@ class GameController: UIViewController {
   }
   
   @objc func tapped(recognizer: UIGestureRecognizer) {
-    
-    let touchLocation = recognizer.location(in: sceneView)
-    let hitTestResult = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
-    
-    if !hitTestResult.isEmpty {
+    setBall()
+  }
+  
+  func setBall(){
+    if goalPlaced {
+      madeGoal = false
+      ball?.state = .placed
+      ball?.removeFromParentNode()
+      ball?.ballNode?.removeFromParentNode()
+      ball = Ball(goalScale: goalScale * 200)
+      currentScenario?.ball = ball!
       
-      guard let hitResult = hitTestResult.first else {
-        return
-      }
-      
-      if !goalPlaced {
-        sceneView.session.run(ARWorldTrackingConfiguration())
-        let worldPos = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
-        let distance = hitResult.distance
-        goal = Goal(distance: distance, worldPosition: worldPos, sceneView: sceneView)
-        sceneView.scene.rootNode.addChildNode(goal!.goalNode!)
-        goal?.setupGoalkeeper()
-        goalScale = Float(hitResult.distance * 0.002)
-        
-        currentScenario = Scenario1()
-        if scenarioNode == nil {
-          scenarioNode = SCNNode()
-          scenarioNode?.scale = goal!.goalNode!.scale
-          scenarioNode?.worldPosition = goal!.goalNode!.worldPosition
-          scenarioNode?.constraints = goal?.goalNode?.constraints
-          sceneView.scene.rootNode.addChildNode(scenarioNode!)
-        }
-
-        currentScenario?.setup(scenarioNode: scenarioNode!, goalScale: goalScale)
-
-        goalPlaced = true
-        intensitySlider.maximumValue = Float(hitResult.distance * 200)
-        angleSlider.maximumValue = Float(hitResult.distance * 200)
-      } else {
-        madeGoal = false
-        ball?.state = .placed
-        ball?.removeFromParentNode()
-        ball?.ballNode?.removeFromParentNode()
-        ball = Ball(goalScale: goalScale * 200)
-        currentScenario?.ball = ball!
-
-        ball!.ballNode!.position = currentScenario!.ballInitialPosition
-        scenarioNode!.addChildNode(ball!.ballNode!)
-      }
+      ball!.ballNode!.position = currentScenario!.ballInitialPosition
+      scenarioNode!.addChildNode(ball!.ballNode!)
     }
   }
   
@@ -203,6 +173,10 @@ extension GameController: ARSCNViewDelegate {
         if field != nil && field?.anchorPoint.identifier == anchor.identifier {
           field?.update(anchor: fieldAnchor)
           goal!.goalNode!.position = SCNVector3(fieldAnchor.center.x, 0, fieldAnchor.center.z + fieldAnchor.extent.z / 3.0)
+          scenarioNode!.position = goal!.goalNode!.position
+          if ball?.state == .placed {
+            setBall()
+          }
         } else {
           field = Field(anchor: fieldAnchor)
           node.addChildNode(field!)
@@ -229,6 +203,9 @@ extension GameController: ARSCNViewDelegate {
           currentScenario?.setup(scenarioNode: scenarioNode!, goalScale: goalScale)
           
           goalPlaced = true
+          
+          setBall()
+          
           DispatchQueue.main.async {
             self.targetView.isHidden = true
             self.shootingControlsView.isHidden = false
@@ -280,7 +257,7 @@ extension GameController: SCNPhysicsContactDelegate {
         let rotationMatrix = SCNMatrix4MakeRotation(rotation.w, rotation.x, rotation.y, rotation.z)
         let translationMatrix = SCNMatrix4MakeTranslation(position.x, position.y, position.z)
         let transformMatrix = SCNMatrix4Mult(rotationMatrix, translationMatrix)
-        sceneView.scene.addParticleSystem(explosion, transform: transformMatrix)
+        sceneView.scene.addParticleSystem(explosion, transform: translationMatrix)
     }
 }
 
@@ -295,7 +272,8 @@ extension GameController: SCNSceneRendererDelegate{
             abs(currentVelocity.x) < restingVelocityThreshold.x &&
             abs(currentVelocity.y) < restingVelocityThreshold.y &&
             abs(currentVelocity.z) < restingVelocityThreshold.z {
-            ballIsResting = true
+          ballIsResting = true
+          setBall()
         }
     }
 }

@@ -23,7 +23,7 @@ class Scenario1 : ScenarioPrefab {
       setDummy(scenarioNode: scenarioNode, position: SCNVector3(-25, 50, -280), scale: SCNVector3(10,10,10))
       setDummy(scenarioNode: scenarioNode, position: SCNVector3(25, 50, -280), scale: SCNVector3(10,10,10))
       
-      ballInitialPosition = SCNVector3(0, 50, -380)
+      ballInitialPosition = SCNVector3(0, 50, -450)
     }
   }
   
